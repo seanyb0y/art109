@@ -1,11 +1,27 @@
-/* CSS resets */
+/* ``````````````color palette */
+
+
+
+:root {
+--bg-color-1: #000000;
+--bg-color-2: #3E3C3C;
+--font: #ff0000;
+--accent-1: #8b0000;
+--accent-2: #2c0202;
+--light: #ffffff;
+}
+
+
+
+
+/* ```````````````````CSS resets */
 
 * {
     margin: 0;
     padding: 0;
 }
 
-/* Respecting User font Size Preference */
+/* ``````````````````````````````````Respecting User font Size Preference */
 
 html {
     font-size: 100%;
@@ -14,22 +30,23 @@ html {
 
 
 
-/* General CSS */
+/* ````````````````````````````````````General CSS */
 
 
 
 body {
-    background-color: rgb(10, 10, 10);
+    background-color: var(--bg-color-1);
+    color: var(--font);
     font-family: Courier;
     font-size: 1.15rem;
 }
 
 header {
-    color: rgb(255, 4, 4);
+    color: var(--font);
     padding: 3rem 4rem;
     margin-bottom: 3rem ;
-    background-color: rgb(29, 4, 4);
-    border-bottom: rgb(0, 0, 0) 3px solid;
+    background-color: var(--bg-color-1);
+    border-bottom: var(--bg-color-1) 3px solid;
     text-align: center;
 }
 
@@ -45,11 +62,16 @@ nav {
 
 nav a {
     text-decoration: none;
-    color: red
+    color: var(--font);
 }
 
+nav a:hover {
+    color: var(--light);
+}
+
+
 main {
-    color: rgb(255, 0, 0); 
+    color: var(--font); 
 }
 
 .about-section {
@@ -75,11 +97,11 @@ main {
 
 .portfolio-item {
     margin-bottom: 4rem;
-    background-color: black;
+    background-color: var(--bg-color-1);
     padding: 4rem;
     text-align: center;
     border-radius: .5rem;
-    box-shadow: 10px 10px 5px rgb(49, 3, 3);
+    box-shadow: 10px 10px 5px var(--accent-1);
 }
 
 .portfolio-item img {
@@ -88,7 +110,7 @@ main {
     display: block;
     border-width: .45rem;
     border-radius: .5rem;
-    border-color: darkred;
+    border-color: var(--accent-1);
     border-style:ridge ;
 }
 
@@ -107,10 +129,22 @@ main {
 
 footer {
     color: red;
-    background-color: rgb(44, 2, 2);
+    background-color: #2c0202;
     padding: 1rem;
 }
 
 footer p {
     font-size: 1rem;
 }
+
+
+
+
+/* `````````````````````````````````style classes */
+
+
+
+.accent-1{
+    color: black;
+}
+
