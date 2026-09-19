@@ -13,7 +13,6 @@
 
 
 
-
 /* ```````````````````CSS resets */
 
 * {
@@ -28,17 +27,24 @@ html {
 }
 
 
-
-
 /* ````````````````````````````````````General CSS */
 
-
+html {
+    scroll-behavior: smooth;
+}
 
 body {
     background-color: var(--bg-color-1);
     color: var(--font);
-    font-family: Courier;
+    font-family: Anonymous Pro; 
     font-size: 1.15rem;
+    text-align: justify;
+}
+
+@media (max-width: 700px) {
+    body {
+        font-size: 1rem;
+    }
 }
 
 header {
@@ -50,8 +56,19 @@ header {
     text-align: center;
 }
 
+@media (max-width: 700px) {
+    header {
+        padding-left: 2rem;
+    }
+}
+
 header h1 {
-    font-size: 3rem;
+    font-family: Coda; 
+    font-size: 2rem;
+    text-decoration:underline;
+    text-decoration-style:dotted;
+    text-decoration-color: var(--accent-1);
+    text-decoration-thickness: .25rem;
 }
 
 nav {
@@ -63,22 +80,59 @@ nav {
 nav a {
     text-decoration: none;
     color: var(--font);
+    margin: 0 1rem; 
+    transition: background-color .5s ease;
 }
 
 nav a:hover {
-    color: var(--light);
+    background-color: var(--accent-1);
+    border-width: .20rem; 
+    border-style:groove;
+}
+
+@media (max-width: 500px) {
+    nav a {
+        margin: 0 .25rem;
+    }
 }
 
 
 main {
     color: var(--font); 
+    margin: 0; 
+}
+
+@media (max-width: 850px) {
+    main {
+        margin: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    main {
+        margin: 1rem;
+    }
 }
 
 .about-section {
     text-align: center;
-    
-    
 }
+
+.about-section h2 {
+    font-family: Coda;
+}
+
+.about-section p {
+    font-size: 1.15rem;
+}
+
+@media (max-width: 700px) {
+    .about-section p {
+        font-size: 1rem;
+    }
+}
+
+
 .about-section, .portfolio-section, .contact-section {
     margin-bottom: 5rem;
 }
@@ -91,8 +145,9 @@ main {
 
 .portfolio-content h2 {
     text-align: center;
-    font-size: 2rem;
-    padding: 2rem;
+    font-family: Coda;
+    font-size: 2.5rem;
+    padding: 1rem;
 }
 
 .portfolio-item {
@@ -103,6 +158,29 @@ main {
     border-radius: .5rem;
     box-shadow: 10px 10px 5px var(--accent-1);
 }
+
+@media (max-width: 800px){
+    .portfolio-item{
+        padding: 3rem;
+    }
+}
+
+@media (max-width: 650px){
+    .portfolio-item{
+        padding: 2rem;
+    }
+}
+
+.portfolio-item p {
+    font-size: 1.25rem;
+}
+
+@media (max-width: 700px) {
+    .portfolio-item p {
+        font-size: 1rem;
+    }
+}
+
 
 .portfolio-item img {
     max-width: 100%;
@@ -148,3 +226,4 @@ footer p {
     color: var(--bg-color-1);
 }
 
+/* Fonts */
