@@ -1,0 +1,111 @@
+
+body{
+   animation: change-color 8s infinite alternate; 
+}
+
+@keyframes change-color {
+    0% {background-color: darkgray;}
+    50% {background-color:darkslategrey;}
+    100% {background-color:white;}
+}
+
+.title {
+    font-family:'Trebuchet MS', 
+        'Lucida Sans Unicode', 
+        'Lucida Grande', 
+        'Lucida Sans', 
+        Arial, sans-serif;
+    text-align: center;
+    margin-top: 80px;
+    animation: skew 3s infinite alternate 
+}
+
+@keyframes skew {
+    0% {transform: skew(0deg, 0deg);}
+    100% {transform: skew(40deg, 70deg);}
+}
+
+
+.square {
+    background-color: red;
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    margin: 50px auto;
+    transition: all 0.25s;
+}
+
+.square:hover{
+    background-color: aqua;
+    transform: rotate(45deg);
+}
+
+
+.button-div{
+    text-align: center;
+}
+
+.button {
+    background-color: chartreuse;
+    padding: 15px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all .5s;
+}
+
+.button:hover {
+    color:white;
+    background-color: blueviolet;
+    transform: scale(1.5);
+}
+
+.loading {
+    background-color: blue;
+    animation: stretch 5s infinite alternate;
+}
+
+@keyframes stretch {
+    0% {width: 100px;}
+    100% {width: 100vw;}
+}
+
+
+/* new animations------------------------------------------------ */
+
+.slide {
+    text-align: center;
+    margin: 50px auto; 
+}
+
+.ball {
+    background-color: rgb(204, 255, 19);
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    margin: 50px auto;
+    transition: all 4s;
+    display: inline-block;
+}
+
+.ball:hover{
+    background-color: rgb(255, 153, 0);
+    transform:translateX(1000px);
+}
+
+
+
+.ball2 {
+    background-color: rgb(204, 255, 19);
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+    animation: travel 12s infinite alternate;
+}
+
+@keyframes travel {
+    0% {transform: translate(120px,70%);}
+    50% {transform: translate(500px,50%);}
+    75% {transform: translate(-300,20%);}
+    100% {transform: translate(1000,-50%);}
+}
