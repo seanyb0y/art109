@@ -4,7 +4,7 @@
 
 :root {
 --bg-color-1: #000000;
---bg-color-2: #3E3C3C;
+--bg-color-2: #2e2d2d;
 --font: #ff0000;
 --accent-1: #8b0000;
 --accent-2: #2c0202;
@@ -119,17 +119,17 @@ main {
 }
 
 .about-section {
-    background-color: rgb(122, 20, 20);
+    background-color: var(--accent-1);
 }
 
 .portfolio-section {
-    background-color: rgb(29, 28, 28);
+    background-color: var(--bg-color-2);
 }
 
 
 footer {
-    color: red;
-    background-color: #2c0202;
+    color: var(--font);
+    background-color: var(--accent-2);
     padding: 1rem;
 }
 
@@ -145,6 +145,6 @@ footer p {
 
 
 .accent-1{
-    color: black;
+    color: var(--bg-color-1);
 }
 
