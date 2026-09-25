@@ -5,6 +5,10 @@ console.log("hellooooo");
 const header = document.querySelector("#header");
 const changeHeaderButton = document.querySelector("#changeHeaderButton");
 const changeThemeButton = document.querySelector("#changeThemeButton");
+const img1 = document.querySelector("#img1");
+const img2 = document.querySelector("#img2");
+const img3 = document.querySelector("#img3");
+
 
 // change header with button click //
 
@@ -34,3 +38,12 @@ changeThemeButton.addEventListener("click", () => {
     changeButtonText();
 })
 
+// toggle image visibility //
+
+img1.addEventListener("click", () => {
+    img2.classList.remove("hidden");
+})
+
+img2.addEventListener("click", () => {
+    img3.classList.remove("hidden");
+})
