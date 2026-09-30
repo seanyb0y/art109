@@ -21,11 +21,11 @@
 
     // SVG shapes used on the buttons
     var leftArrow = '<svg width="44" height="60">' +
-            '<polyline points="30 10 10 30 30 50" stroke="rgba(255,255,255,0.5)" stroke-width="4"' +
+            '<polyline points="30 10 10 30 30 50" stroke="rgba(247, 242, 242, 0.5)" stroke-width="4"' +
               'stroke-linecap="butt" fill="none" stroke-linejoin="round"/>' +
             '</svg>',
         rightArrow = '<svg width="44" height="60">' +
-            '<polyline points="14 10 34 30 14 50" stroke="rgba(255,255,255,0.5)" stroke-width="4"' +
+            '<polyline points="14 10 34 30 14 50" stroke="rgba(247, 242, 242, 0.5)" stroke-width="4"' +
               'stroke-linecap="butt" fill="none" stroke-linejoin="round"/>' +
             '</svg>',
         closeX = '<svg width="30" height="30">' +
@@ -48,7 +48,7 @@
             afterShow: null,
             afterHide: null,
             onChange: null,
-            overlayBackgroundColor: 'rgba(0,0,0,.8)',
+            overlayBackgroundColor: 'rgba(99, 93, 93, 0.8)',
             closeX: closeX,
             leftArrow: leftArrow,
             rightArrow: rightArrow,
