@@ -1,0 +1,66 @@
+/* ``````````````color palette */
+
+
+
+:root {
+--bg-color-1: #000000;
+--bg-color-2: #333333;
+--font: #d80606;
+--accent-1: #c50101;
+--accent-2: #d10303;
+--light: #ffffff;
+}
+
+
+
+/* ```````````````````CSS resets */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* make images repsonsive---------------------------*/
+
+img {
+    display: block;
+    max-width: 100%;
+}
+
+
+/* ``````````````````````````````````Respecting User font Size Preference */
+
+html {
+    font-size: 100%;
+}
+
+/*---------------------------------------------- general css */
+
+body {
+    background: var(--bg-color-1);
+    color: var(--font);
+    font-family: Anonymous Pro;
+    font-size: 1rem;
+    padding: 10rem auto;
+    margin: 0.25rem;
+    white-space: pre-wrap;
+}
+
+.cursor {
+    display: inline-block;
+    width: 10rem;
+    background: var(--font);
+    animation: blink 0.8s infinite; 
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0; }
+    100% { opacity: 1; }
+}
