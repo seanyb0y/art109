@@ -54,7 +54,7 @@ function typeLine() {
         if (charIndex < currentLine.length) {
             terminal.innerHTML += currentLine.charAt(charIndex);
             charIndex++;
-            setTimeout(typeLine, 40);
+            setTimeout(typeLine, 3);
         } else {
             terminal.innerHTML += "\n";
             lineIndex++;
