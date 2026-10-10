@@ -170,15 +170,27 @@ main {
     margin: 2rem 0;
 }
 
+iframe {
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    border-radius: .5rem;
+    aspect-ratio: 16/9;
+}
 
 /* project content is for project pages --------------------------------- */
 .project-content {
     text-align: center;
 }
 
-.project-content img {
+.project-content img, .project-content video {
     margin: 0 auto;
     padding: 1.5rem; 
+}
+
+.project-content p {
+    padding: 1.5rem;
 }
 
 @media (max-width: 430px) {
