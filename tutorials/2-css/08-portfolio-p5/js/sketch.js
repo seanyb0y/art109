@@ -24,7 +24,7 @@ function windowResized(){
 function draw() {
     background( 10, 10, 20);
 
-    if (frameCount % 5 === 0) {
+    if (frameCount % 8 === 0) {
         squares.push(new Square());
     }
 
@@ -49,13 +49,13 @@ class Square {
         this.g = random ([255, 0, 0]);
         this.b = random ([255, 0, 0]);
 
-        this.copies = int(random(3,8));
+        this.copies = int(random(5,8));
 
         this.growth = random (10, 10);
     }
 
     update() {
-        this.life -= 1;
+        this.life -= .5;
 
         this.h += this.growth;
     }
