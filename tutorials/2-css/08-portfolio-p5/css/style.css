@@ -57,7 +57,15 @@ body {
 }
 
 header {
-    padding: 5rem 2rem;
+    background-color: var(--bg-color-1);
+    border-style: dashed;
+    border-color: var(--accent-1);
+    border-width: 0.35rem;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+
+    padding: 3rem 2rem;
     margin-bottom: 7rem;
 }
 
@@ -170,7 +178,7 @@ main {
     margin: 2rem 0;
 }
 
-.about-content, .portfolio-content {
+.about-content, .portfolio-content, .contact-content {
     background-color: rgba(0,0,0,0.7);
     
     padding: 3rem;
@@ -236,13 +244,19 @@ iframe {
 }
 
 footer {
+    background-color: var(--bg-color-1);
+    border-style: dashed;
+    border-width: 0.35rem;
+    border-bottom: none;
+    border-right: none;
+    border-left: none;
     padding: 1rem 2rem;
 }
 
 footer img {
     display: inline;
     max-width: 3rem;
-    margin: 0 .5rem;
+    margin: 0.5rem;
 }
 
 @media (max-width: 512px) {
@@ -286,5 +300,5 @@ footer img {
 }
 
 .flex-item-grid {
-    flex: 1  0 16rem;
+    flex: 1 0 16rem;
 }
