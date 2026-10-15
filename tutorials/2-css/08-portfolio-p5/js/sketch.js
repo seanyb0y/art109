@@ -10,7 +10,7 @@ let forms = [];
 
 
 function setup(){
-    canvas = createCanvas(windowWidth, windowHeight,);
+    canvas = createCanvas(windowWidth, document.body.scrollHeight);
     canvas.position(0, 0);
     canvas.style("z-index", -2);
     rectMode(CENTER);
