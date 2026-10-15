@@ -170,6 +170,12 @@ main {
     margin: 2rem 0;
 }
 
+.about-content, .portfolio-content {
+    background-color: rgba(0,0,0,0.7);
+    
+    padding: 3rem;
+}
+
 iframe {
     width: 100%;
     height: auto;
