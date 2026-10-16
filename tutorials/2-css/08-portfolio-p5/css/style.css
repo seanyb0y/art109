@@ -235,6 +235,7 @@ iframe {
     border-radius: .2rem;
 }
 
+
 .portfolio-item p {
     font-size: 1rem;
 }
@@ -251,6 +252,7 @@ footer {
     border-right: none;
     border-left: none;
     padding: 5rem;
+    margin: 7rem auto 7rem auto;
 }
 
 footer img {
@@ -302,3 +304,4 @@ footer img {
 .flex-item-grid {
     flex: 1 0 15rem;
 }
+
