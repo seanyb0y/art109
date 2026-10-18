@@ -47,13 +47,21 @@ html {
     scroll-behavior: smooth;
 }
 
+html, body {
+    height: 100%
+}
+
 body {
-    background-color: var(--bg-color-1);
+    /* background-color: var(--bg-color-1); */
+    background-color: rgb(10, 10, 20);
     color: var(--font);
     font-size: 1.3rem;
     line-height: 1.5;
     font-family: Anonymous Pro;
     text-align: justify;
+
+    display: flex;
+    flex-direction: column;
 }
 
 header {
@@ -154,6 +162,7 @@ nav a:hover {
 }
 
 main {
+    flex: 1;
     margin: 0;
 }
 
@@ -252,7 +261,7 @@ footer {
     border-right: none;
     border-left: none;
     padding: 5rem;
-    margin: 7rem auto 7rem auto;
+    /* margin: 2rem auto; */
 }
 
 footer img {

@@ -10,7 +10,8 @@ let forms = [];
 
 
 function setup(){
-    canvas = createCanvas(windowWidth, document.body.scrollHeight);
+    // canvas = createCanvas(windowWidth, document.documentElement.scrollHeight);
+    canvas = createCanvas(windowWidth, windowHeight);
     canvas.position(0, 0);
     canvas.style("z-index", -2);
     rectMode(CENTER);
@@ -19,16 +20,16 @@ function setup(){
     for (let i = 0; i < 50; i++)  {
         forms.push(new SineForm());
     }
-    // angleMode(DEGREES)
-    // background(225);
+
 }
 
 function windowResized(){
-    resizeCanvas(windowWidth, windowHeight);
+    // const resizeCanvas = document.documentElement.scrollHeight;
+    resizeCanvas(windowWidth, pageHeight);
 }
 
 function draw() {
-    background( 10, 10, 20);
+    background(10, 10, 20);
 
     if (frameCount % 2 === 0) {
         squares.push(new Square());
@@ -58,6 +59,8 @@ function draw() {
         form.update();
         form.display();
     }
+
+    
 
 }
 
