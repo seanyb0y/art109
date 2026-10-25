@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gifs Videos and Webcam</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <main>
+        <iframe width="1120" height="730"
+            src="https://www.youtube.com/embed/ubFq-wV3Eic?si=26No2r9OYIRIJRyJautoplay=1&mute=1&loop=1"
+            title="YouTube video player" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+        <img src="media/matrix2.gif" alt="matrix person" class="matrix-person">
+
+        <div class="welcome-div">
+            <p>welcome to your new reality.. you are free.. you are alive.. you are happy
+                welcome to your new reality.. you are free.. you are alive.. you are happy
+                welcome to your new reality.. you are free.. you are alive.. you are happy
+                welcome to your new reality.. you are free.. you are alive.. you are happy
+                welcome to your new reality.. you are free.. you are alive.. you are happy
+                welcome to your new reality.. you are free.. you are alive.. you are happy
+                welcome to your new reality.. you are free.. you are alive.. you are happy
+                welcome to your new reality.. you are free.. you are alive.. you are happy
+            </p>
+            <img src="media/matrix1.gif" alt="matrix code" class="matrix-code">
+        </div>
+        <!-- autoplay video -->
+        <video width="180" height="320" autoplay muted loop>
+            <source src="media/glitch.mp4" type="video/mp4">
+        </video>
+
+        <!-- hover videos -->
+        <video class="hover-video" width="180" height="320" muted loop>
+            <source src="media/glitch.mp4" type="video/mp4">
+        </video>
+        <video class="hover-video" width="180" height="320" muted loop>
+            <source src="media/glitch.mp4" type="video/mp4">
+        </video>
+
+        <!-- click on play  -->
+        <video class="click-video" width="180" height="320" muted loop>
+            <source src="media/glitch.mp4" type="video/mp4">
+        </video>
+
+        <video id="webcam" autoplay playsinline></video>
+
+    </main>
+<script src="js/video.js"></script>
+<script src="js/webcam.js"></script>
+</body>
+
+</html>
