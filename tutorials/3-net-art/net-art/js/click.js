@@ -5,6 +5,7 @@ const images = [
     document.getElementById("image2"),
     document.getElementById("image3"),
     document.getElementById("image4"),
+    document.getElementById("image5"),
 ];
 
 let currentImage = 0;
