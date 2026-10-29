@@ -1,0 +1,61 @@
+
+body {
+    background-color: black;
+}
+
+.brain {
+    position: relative;
+    left: 39%;
+}
+
+#brainImage {
+    cursor: pointer;
+}
+
+.braintext {
+    color: rgb(3, 226, 3);
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    padding: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+#image1 {
+    
+    position: absolute; 
+    top: 5rem;
+    left: 20rem;
+}
+
+#image2 {
+  
+    position: absolute; 
+    top: 20rem;
+    right: 34rem;
+}
+
+#image3 {
+  
+    position: absolute; 
+    bottom: 20rem;
+    left: 1rem;
+}
+
+#text-layer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+
+.random-text {
+    position: absolute;
+    color: lime;
+    font-family: monospace;
+    max-width: 300px;
+    opacity: 1;
+    transition: opacity 5s ease;
+}
