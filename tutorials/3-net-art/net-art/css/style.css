@@ -12,6 +12,14 @@ body {
     cursor: pointer;
 }
 
+
+#vrImage {
+    position: relative;
+    cursor: pointer;
+    width: 40rem;
+    height: auto;
+}
+
 .braintext {
     color: rgb(3, 226, 3);
     font-family: 'Courier New', Courier, monospace;
@@ -27,8 +35,8 @@ body {
   
     position: absolute; 
     top: 3rem;
-    right: 0rem;
-    height: 90rem;
+    right: 10rem;
+    height: 70rem;
     /* width: 100rem; */
 }
 

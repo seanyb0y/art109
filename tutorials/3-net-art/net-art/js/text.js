@@ -8,7 +8,9 @@ const messages = [
     "Organic and synthetic fusion, a new breed of human.",
     "This is the true meaning of technological progression",
     "The human body can now be explored like action figures.. customized with different parts that make it better.",
-    "We share the strengths of body and machine, canceling out the weaknesses in both."
+    "We share the strengths of body and machine, canceling out the weaknesses in both.",
+    "Digital space will blossom with the exponential increase of users, populating the infinitude of our new reality.",
+    "The birth of an era where there are no limits. We can only go higher",
     
 ];
 

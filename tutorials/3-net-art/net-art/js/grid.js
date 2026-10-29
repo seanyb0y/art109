@@ -17,7 +17,7 @@ class Grid {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
 
-        this.cols = Math.floor(Math.random() * 10) + 2;
+        this.cols = Math.floor(Math.random() * 5) + 2;
         this.rows = Math.floor(Math.random() * 10) + 2;
 
         this.cellSize = 25 + Math.random() * 60;

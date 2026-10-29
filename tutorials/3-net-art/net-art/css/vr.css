@@ -1,0 +1,19 @@
+body {
+    background-color: black;
+}
+
+#text-layer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+
+.random-text {
+    position: absolute;
+    color: rgb(255, 8, 0);
+    font-family: monospace;
+    max-width: 300px;
+    opacity: 1;
+    transition: opacity 5s ease;
+}
