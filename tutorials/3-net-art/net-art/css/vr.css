@@ -102,6 +102,22 @@ body {
     transform: rotate(90deg);
 }
 
+.glitch6 {
+    position: absolute;
+    width: 50rem;
+    bottom: 3rem;
+    right: 50rem;
+    
+}
+
+.glitch7 {
+    position: absolute;
+    width: 13rem;
+    bottom: 20rem;
+    left: 59rem;
+    
+}
+
 #text-layer {
     position: fixed;
     width: 100vw;
