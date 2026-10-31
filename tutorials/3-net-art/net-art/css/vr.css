@@ -2,6 +2,106 @@ body {
     background-color: black;
 }
 
+/* ocean sunset */
+#image1 {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+}
+
+/* cloudy hills */
+
+#image2 {
+    position: absolute;
+    bottom: 7rem;
+    right: 18rem;
+}
+
+/* forest waterfall */
+
+#image3 {
+    position: absolute;
+    bottom: 3rem;
+    left: 10rem;
+}
+
+/* misty lake */
+
+#image4 {
+    position: absolute;
+    top: 10rem;
+    right: 40rem;
+}
+
+/* sunny plains */
+
+#image5 {
+    position: absolute;
+    bottom: 5rem;
+    right: 50rem;
+}
+
+/* foggy valley */
+
+#image6 {
+    position: absolute;
+    top: 4rem;
+    left: 2rem;
+}
+
+/* fall trees */
+
+#image7 {
+    position: absolute;
+    bottom: 23rem;
+    left: 40rem;
+}
+
+/* northern lights */
+
+#image8 {
+    position: absolute;
+    top: 5rem;
+    left: 50rem;
+}
+
+.glitch1 {
+    position: absolute;
+    width: 40rem;
+    
+}
+
+.glitch2 {
+    position: absolute;
+    bottom: 7rem;
+    right: 19rem;
+    width: 17rem;
+}
+
+.glitch3 {
+    position: absolute;
+    width: 13rem;
+    bottom: 3rem;
+    left: 14rem;
+}
+
+.glitch4 {
+    position: absolute;
+    width: 13rem;
+    top: 2rem;
+    right: 1rem;
+    width: 17rem;
+    
+}
+
+.glitch5 {
+    position: absolute;
+    width: 13rem;
+    bottom: 3rem;
+    right: 50rem;
+    transform: rotate(90deg);
+}
+
 #text-layer {
     position: fixed;
     width: 100vw;
@@ -13,7 +113,12 @@ body {
     position: absolute;
     color: rgb(255, 8, 0);
     font-family: monospace;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 6px 10px;
+
+    display: inline-block;
+    width: fit-content;
     max-width: 300px;
-    opacity: 1;
+    /* opacity: 1; */
     transition: opacity 5s ease;
 }

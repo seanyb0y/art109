@@ -16,6 +16,8 @@ const messages = [
     "Everything we valued of material has washed away with dust. Just clutter.",
     "We wandered a forest filled with opportunity, but lost the way back home. Tangled in the vines, we became apart of its ecosystem",
     "Plugged into digital systems 24/7, we've become the device. An extension to the system.",
+    "There's no point of unplugging.. everything we have is in the system. The real world provides nothing but a base to connect",
+    "The real world is now a dream. Our dreams become our new fabricated reality."
     
 ];
 
@@ -29,6 +31,18 @@ function typeText(element, text, speed = 75) {
         if (index >= text.length) {
             clearInterval(interval);
         }
+    }, speed);
+}
+
+function deleteText(element, speed = 30) {
+    const interval = setInterval(() => {
+        element.textContent = 
+            element.textContent.slice(0, -1);
+
+            if (element.textContent.length === 0) {
+                clearInterval(interval);
+                element.remove();
+            }
     }, speed);
 }
 
