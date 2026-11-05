@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#050908">
+    <meta name="description" content="Net Surfer is a neon-lit launchpad for wandering the open web and creating a little home of your own.">
+    <title>Net Surfer — Webspace navigator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="supabase-config.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <canvas class="data-rain" id="data-rain" aria-hidden="true"></canvas>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="noise" aria-hidden="true"></div>
+
+    <header class="topbar">
+        <a class="brand" href="#" aria-label="Net Surfer home">
+            <span class="brand-symbol" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span>NET<span class="brand-divider">//</span>SURFER</span>
+        </a>
+        <nav class="top-nav" aria-label="Main navigation">
+            <a href="#destinations">DESTINATIONS</a>
+            <a href="#terminal">TERMINAL</a>
+            <a href="#community-web">COMMUNITY WEB</a>
+            <a href="#make-a-site">MAKE A SITE</a>
+        </nav>
+        <div class="connection"><span class="live-dot"></span><span>UPLINK ACTIVE</span></div>
+    </header>
+
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow"><span class="eyebrow-line"></span> A FIELD GUIDE TO THE OPEN WEB <span class="eyebrow-code">v.02.26</span></p>
+                <h1 id="hero-title">Get lost<br>in the <span class="glow-word">right</span><br>direction<span class="cursor">_</span></h1>
+                <p class="hero-description">Past the feed. Beyond the algorithm. Find a new corner of the internet and see where it takes you.</p>
+                <a class="primary-button" href="#destinations"><span class="button-icon">↘</span> PICK A PORTAL</a>
+                <div class="hero-footnote"><span class="crosshair">⌖</span> NO FEED. NO TRACKING. JUST CURIOSITY.</div>
+            </div>
+
+            <div class="hero-art" aria-label="Animated network map">
+                <div class="art-grid"></div>
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+                <div class="orbit orbit-three"></div>
+                <div class="orbit-core"><span>WEB<br>SPACE</span></div>
+                <div class="node node-one"><span class="node-dot"></span><span>NODE_07</span></div>
+                <div class="node node-two"><span class="node-dot"></span><span>NODE_13</span></div>
+                <div class="node node-three"><span class="node-dot"></span><span>NODE_22</span></div>
+                <div class="node node-four"><span class="node-dot"></span><span>NODE_31</span></div>
+                <span class="art-coordinate coordinate-one">37° 46' 49.6" N<br>122° 25' 09.6" W</span>
+                <span class="art-coordinate coordinate-two">SIGNAL / FOUND</span>
+                <span class="art-cross cross-one">+</span>
+                <span class="art-cross cross-two">+</span>
+                <span class="art-cross cross-three">+</span>
+                <div class="radar-ring"></div>
+            </div>
+
+            <div class="scroll-cue"><span></span> SCROLL TO EXPLORE</div>
+        </section>
+
+        <section class="terminal-section" id="terminal" aria-labelledby="terminal-title">
+            <div class="section-topline">
+                <p class="eyebrow"><span class="eyebrow-line"></span> DIRECT CONNECTION</p>
+                <span class="section-index">01 / YOUR OWN COORDINATES</span>
+            </div>
+            <div class="terminal-panel">
+                <div class="terminal-bar">
+                    <div class="terminal-lights" aria-hidden="true"><span></span><span></span><span></span></div>
+                    <span class="terminal-label">ROUTE_TERMINAL.EXE</span>
+                    <span class="terminal-status"><span class="live-dot"></span> READY</span>
+                </div>
+                <div class="terminal-content">
+                    <div class="terminal-prompt"><span class="prompt-mark">guest@webspace</span><span>:</span><span class="prompt-path">~</span><span>$</span> <span>enter destination</span></div>
+                    <form id="route-form" class="route-form">
+                        <label class="sr-only" for="route-input">Enter a website URL</label>
+                        <span class="input-prefix" aria-hidden="true">↳</span>
+                        <input id="route-input" type="text" inputmode="url" autocomplete="url" placeholder="https://somewhere-on-the-internet.net" spellcheck="false">
+                        <button class="route-submit" type="submit">CONNECT <span>↗</span></button>
+                    </form>
+                    <p class="terminal-hint" id="route-message" aria-live="polite">HTTP / HTTPS ONLY &nbsp;·&nbsp; YOUR NEXT TAB IS A NEW DIMENSION.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="destinations-section" id="destinations" aria-labelledby="destinations-title">
+            <div class="section-topline">
+                <p class="eyebrow"><span class="eyebrow-line"></span> HANDPICKED WORMHOLES</p>
+                <span class="section-index">02 / KNOWN UNIVERSES</span>
+            </div>
+            <div class="destination-heading">
+                <div>
+                    <h2 id="destinations-title">Choose your<br><span>own rabbit hole.</span></h2>
+                    <p class="section-description">A few signals worth following. The rest is up to you.</p>
+                </div>
+                <div class="filter-wrap">
+                    <label class="sr-only" for="destination-filter">Filter destinations</label>
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+                    <input id="destination-filter" type="search" placeholder="SCAN SIGNALS">
+                    <kbd>/</kbd>
+                </div>
+            </div>
+
+            <div class="destination-grid" id="destination-grid">
+                <a class="destination-card card-archive" href="https://archive.org" target="_blank" rel="noopener noreferrer" data-name="internet archive history books movies digitize">
+                    <div class="card-top"><span class="card-category">THE TIME MACHINE</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art archive-art" aria-hidden="true"><div class="archive-ring ring-a"></div><div class="archive-ring ring-b"></div><div class="archive-ring ring-c"></div><span class="archive-glyph">∞</span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_001 / ARCHIVE</span><h3>Internet Archive</h3><p>Lost pages, old films, and the ghosts of the web.</p></div>
+                    <span class="card-coordinate">37.77° N / 122.42° W</span>
+                </a>
+
+                <a class="destination-card card-radio" href="https://radio.garden" target="_blank" rel="noopener noreferrer" data-name="radio garden music sound stations around world">
+                    <div class="card-top"><span class="card-category">AUDIO FREQUENCY</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art radio-art" aria-hidden="true"><div class="radio-globe"><span></span><span></span><span></span><i></i></div><div class="radio-wave wave-a"></div><div class="radio-wave wave-b"></div><div class="radio-wave wave-c"></div></div>
+                    <div class="card-bottom"><span class="card-index">NODE_014 / TRANSMIT</span><h3>Radio Garden</h3><p>Spin the globe. Tune in to somewhere else.</p></div>
+                    <span class="card-coordinate">WORLDWIDE / LIVE</span>
+                </a>
+
+                <a class="destination-card card-nasa" href="https://eyes.nasa.gov" target="_blank" rel="noopener noreferrer" data-name="nasa space planets planets earth solar system universe">
+                    <div class="card-top"><span class="card-category">OUTER NETWORK</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art space-art" aria-hidden="true"><div class="space-sun"></div><div class="space-orbit orbit-a"><i></i></div><div class="space-orbit orbit-b"><i></i></div><div class="space-orbit orbit-c"><i></i></div><span class="space-star star-a">✦</span><span class="space-star star-b">·</span><span class="space-star star-c">+</span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_022 / DEEP SPACE</span><h3>NASA Eyes</h3><p>Take the scenic route through our solar system.</p></div>
+                    <span class="card-coordinate">SOL / SYSTEM</span>
+                </a>
+
+                <a class="destination-card card-are-na" href="https://www.are.na" target="_blank" rel="noopener noreferrer" data-name="are.na ideas creative research art visual archive">
+                    <div class="card-top"><span class="card-category">THOUGHT NETWORK</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art arena-art" aria-hidden="true"><div class="arena-block block-a"></div><div class="arena-block block-b"></div><div class="arena-block block-c"></div><div class="arena-block block-d"></div><div class="arena-block block-e"></div><div class="arena-block block-f"></div><span class="arena-plus">+</span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_031 / COLLECTIVE</span><h3>Are.na</h3><p>A quiet place for ideas to find each other.</p></div>
+                    <span class="card-coordinate">OPEN CHANNEL / 24-7</span>
+                </a>
+
+                <a class="destination-card" href="https://www.window-swap.com" target="_blank" rel="noopener noreferrer" data-name="window swap travel views windows people cities world">
+                    <div class="card-top"><span class="card-category">REMOTE VIEWPORT</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art text-portal window-art" aria-hidden="true"><span class="window-frame"><i></i><i></i><i></i><i></i></span><span class="portal-symbol">⌑</span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_038 / WINDOW</span><h3>WindowSwap</h3><p>Borrow somebody’s view from across the planet.</p></div>
+                    <span class="card-coordinate">WORLDWIDE / VIEW</span>
+                </a>
+
+                <a class="destination-card" href="https://artsandculture.google.com" target="_blank" rel="noopener noreferrer" data-name="google arts culture museums art gallery painting history">
+                    <div class="card-top"><span class="card-category">VIRTUAL GALLERY</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art text-portal gallery-art" aria-hidden="true"><span class="gallery-frame"></span><span class="gallery-sun"></span><span class="gallery-mark">G//A</span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_044 / CULTURE</span><h3>Arts &amp; Culture</h3><p>Walk through collections from across the world.</p></div>
+                    <span class="card-coordinate">MUSEUM / MODE</span>
+                </a>
+
+                <a class="destination-card" href="https://www.gutenberg.org" target="_blank" rel="noopener noreferrer" data-name="project gutenberg books reading literature classics ebooks library">
+                    <div class="card-top"><span class="card-category">OPEN LIBRARY</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art text-portal book-art" aria-hidden="true"><span class="book-shape"><i></i><i></i></span><span class="book-spark">✳</span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_052 / READING</span><h3>Project Gutenberg</h3><p>Open a classic. Fall through a thousand pages.</p></div>
+                    <span class="card-coordinate">EBOOKS / OPEN</span>
+                </a>
+
+                <a class="destination-card" href="https://earth.nullschool.net" target="_blank" rel="noopener noreferrer" data-name="earth nullschool weather wind ocean currents climate map data">
+                    <div class="card-top"><span class="card-category">PLANETARY SIGNAL</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art text-portal earth-art" aria-hidden="true"><span class="earth-globe"><i></i><i></i><i></i></span><span class="earth-orbit"></span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_063 / ATMOSPHERE</span><h3>Earth Nullschool</h3><p>Watch wind and weather trace the living planet.</p></div>
+                    <span class="card-coordinate">EARTH / NOW</span>
+                </a>
+
+                <a class="destination-card" href="https://neal.fun" target="_blank" rel="noopener noreferrer" data-name="neal fun interactive games playful internet experiments">
+                    <div class="card-top"><span class="card-category">PLAYFUL DIMENSION</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art text-portal fun-art" aria-hidden="true"><span class="fun-orb orb-one"></span><span class="fun-orb orb-two"></span><span class="fun-orb orb-three"></span><span class="fun-title">FUN!</span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_071 / PLAY</span><h3>Neal.fun</h3><p>Small, strange interactive worlds to wander through.</p></div>
+                    <span class="card-coordinate">SIDE QUEST / OPEN</span>
+                </a>
+
+                <a class="destination-card" href="https://theuselessweb.com" target="_blank" rel="noopener noreferrer" data-name="useless web random silly websites surprise strange internet">
+                    <div class="card-top"><span class="card-category">UNKNOWN FREQUENCY</span><span class="card-arrow">↗</span></div>
+                    <div class="portal-art text-portal unknown-art" aria-hidden="true"><span class="unknown-ring"></span><span class="unknown-mark">?</span><span class="unknown-star">✳</span></div>
+                    <div class="card-bottom"><span class="card-index">NODE_089 / MYSTERY</span><h3>The Useless Web</h3><p>One button. One strange website. Zero predictions.</p></div>
+                    <span class="card-coordinate">DESTINATION / UNKNOWN</span>
+                </a>
+            </div>
+            <p class="no-results" id="no-results" hidden>NO SIGNAL FOUND. TRY A DIFFERENT SEARCH.</p>
+            <button class="random-button" id="random-route" type="button"><span>⤨</span> THROW A DIGITAL DART <span class="random-hint">[ RANDOM ROUTE ]</span></button>
+        </section>
+
+        <section class="maker-section" id="make-a-site" aria-labelledby="maker-title">
+            <div class="section-topline">
+                <p class="eyebrow"><span class="eyebrow-line"></span> CLAIM YOUR PATCH OF THE WEB</p>
+                <span class="section-index">03 / BUILD A HOME</span>
+            </div>
+            <div class="maker-heading">
+                <h2 id="maker-title">Don’t just browse.<br><span>Leave a signal.</span></h2>
+                <p class="section-description">Make a tiny site of your own and publish it to the shared web, or download a standalone copy.</p>
+            </div>
+            <div class="maker-layout">
+                <form class="maker-form" id="maker-form">
+                    <label class="maker-field">
+                        <span>YOUR SITE NAME</span>
+                        <input id="site-name" name="siteName" type="text" maxlength="40" placeholder="e.g. Moon Motel" required>
+                    </label>
+                    <label class="maker-field">
+                        <span>YOUR HANDLE</span>
+                        <div class="handle-input"><span>@</span><input id="site-handle" name="handle" type="text" maxlength="24" placeholder="stardrifter" required></div>
+                    </label>
+                    <label class="maker-field">
+                        <span>WHAT’S YOUR CORNER ABOUT?</span>
+                        <textarea id="site-about" name="about" rows="3" maxlength="180" placeholder="A tiny signal from your corner of the universe..." required></textarea>
+                    </label>
+                    <label class="maker-field">
+                        <span>YOUR SIGNAL COLOR</span>
+                        <select id="site-color" name="color">
+                            <option value="#69ff9e">MATRIX GREEN</option>
+                            <option value="#ff5de4">NEON PINK</option>
+                            <option value="#6ee7ff">CYBER BLUE</option>
+                            <option value="#ffbd59">SOLAR AMBER</option>
+                        </select>
+                    </label>
+                    <button class="route-submit maker-submit" type="submit">GENERATE MY SITE <span>↗</span></button>
+                    <p class="maker-note">NO ACCOUNT NEEDED. WITH SUPABASE CONNECTED, YOUR SITE IS PUBLISHED TO THE SHARED WEB.</p>
+                </form>
+                <div class="site-preview-wrap">
+                    <div class="preview-bar"><span>LIVE PREVIEW</span><span id="preview-address">YOUR-SITE.NET</span></div>
+                    <iframe id="site-preview" title="Preview of your generated website" sandbox="allow-same-origin" srcdoc="<!doctype html><html lang='en'><meta charset='utf-8'><body style='margin:0;background:#080d0a;color:#a6b0a7;font:14px monospace;display:grid;place-items:center;min-height:100vh;text-align:center'><div><div style='color:#69ff9e;font-size:28px'>⌁</div><p>YOUR NEW SIGNAL WILL APPEAR HERE</p></div></body></html>"></iframe>
+                    <a class="download-site" id="download-site" href="#" download="my-corner.html" hidden>DOWNLOAD YOUR SITE <span>↓</span></a>
+                </div>
+            </div>
+            <p class="hosting-note">Shared-web pages are hosted by Net Surfer. Download a copy anytime; without Supabase setup, your entries stay in this browser only.</p>
+        </section>
+
+        <section class="community-section" id="community-web" aria-labelledby="community-title">
+            <div class="section-topline">
+                <p class="eyebrow"><span class="eyebrow-line"></span> A GROWING WEB OF SMALL CORNERS</p>
+                <span class="section-index">04 / SHARED SIGNALS</span>
+            </div>
+            <div class="community-heading">
+                <div>
+                    <h2 id="community-title">Somewhere, someone<br><span>left a light on.</span></h2>
+                    <p class="section-description">Every published site adds a new signal. Select a node to open its page.</p>
+                </div>
+                <span class="local-badge"><span class="live-dot"></span> SHARED NETWORK</span>
+            </div>
+            <div class="web-field" id="web-field" role="region" aria-label="Interactive spiderweb of published Net Surfer sites" tabindex="0">
+                <div class="web-world" id="web-world">
+                    <svg class="web-threads" id="web-threads" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
+                        <circle class="web-orbit orbit-outer" cx="500" cy="250" r="205"></circle>
+                        <circle class="web-orbit orbit-inner" cx="500" cy="250" r="130"></circle>
+                        <circle class="web-orbit orbit-core-line" cx="500" cy="250" r="58"></circle>
+                        <g id="web-connections"></g>
+                    </svg>
+                    <div class="web-hub"><span>⌁</span><strong>NET<br>SURFER</strong></div>
+                    <div class="web-nodes" id="web-nodes"></div>
+                    <p class="web-empty" id="web-empty">NO PUBLISHED SIGNALS YET<br><span>MAKE A SITE TO CAST THE FIRST THREAD</span></p>
+                </div>
+                <div class="web-controls" aria-label="Spiderweb zoom controls">
+                    <button type="button" id="web-zoom-out" aria-label="Zoom out">−</button>
+                    <button type="button" id="web-zoom-in" aria-label="Zoom in">+</button>
+                    <button type="button" id="web-zoom-reset" aria-label="Reset web zoom">RESET</button>
+                </div>
+                <span class="web-gesture-hint">DRAG TO PAN <span>·</span> WHEEL TO ZOOM <span>·</span> PINCH ON TOUCH</span>
+                <span class="web-coordinate web-coordinate-left">LOCAL NETWORK / <span id="site-count">00</span> NODES</span>
+                <span class="web-coordinate web-coordinate-right">ZOOM <span id="web-zoom-level">100%</span></span>
+            </div>
+            <p class="hosting-note" id="web-storage-status" role="status">Connecting to the shared site network…</p>
+        </section>
+
+        <section class="protocol-section" id="protocol">
+            <span class="protocol-mark" aria-hidden="true">⌁</span>
+            <p>THE WEB IS A PLACE.<br><span>GO BE SOMEWHERE.</span></p>
+            <span class="protocol-code">END OF LINE_</span>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <a class="brand footer-brand" href="#" aria-label="Net Surfer home">
+            <span class="brand-symbol" aria-hidden="true"><span></span><span></span><span></span></span>
+            <span>NET<span class="brand-divider">//</span>SURFER</span>
+        </a>
+        <span class="footer-note">BUILT FOR THE CURIOUS &nbsp;·&nbsp; EST. IN THE VOID</span>
+        <a class="back-top" href="#">BACK TO TOP ↑</a>
+    </footer>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

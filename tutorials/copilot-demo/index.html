@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#090c11">
+    <meta name="description" content="A quieter corner of the internet for sharing what inspires you.">
+    <title>Orbit — Find your people</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="common-words.js" defer></script>
+    <script src="app.js" defer></script>
+</head>
+<body>
+    <header class="topbar">
+        <a class="brand" href="#" aria-label="Orbit home">
+            <span class="brand-mark" aria-hidden="true">
+                <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="10.5" stroke="currentColor" stroke-width="2.5"/><path d="M5 19.5c4.8 2.4 11.6 1.8 16.8-1.6 2.3-1.5 4-3.5 5.2-5.8" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="25.5" cy="7" r="3" fill="currentColor"/></svg>
+            </span>
+            <span>orbit</span>
+        </a>
+        <div class="top-search">
+            <button class="search-toggle" type="button" aria-label="Open search" aria-expanded="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+            </button>
+            <input id="search-input" type="search" placeholder="Search Orbit" aria-label="Search posts">
+            <kbd>⌘ K</kbd>
+        </div>
+        <div class="top-actions">
+            <button class="icon-button notification-button" type="button" aria-label="Notifications">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>
+                <span class="notification-dot"></span>
+            </button>
+            <button class="profile-chip" type="button" aria-label="Your profile">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=96&h=96&q=80" alt="">
+                <span>Alex Morgan</span>
+                <svg class="chevron" viewBox="0 0 20 20" aria-hidden="true"><path d="m5 7 5 5 5-5"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <aside class="sidebar" aria-label="Main navigation">
+            <div class="sidebar-inner">
+                <div class="workspace-label">YOUR SPACE</div>
+                <nav class="primary-nav">
+                    <a class="nav-link active" href="#feed" aria-current="page">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg>
+                        <span>Home</span>
+                    </a>
+                    <a class="nav-link" href="#discover">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4.5 4.5M11 8v6m-3-3h6"/></svg>
+                        <span>Explore</span>
+                    </a>
+                    <a class="nav-link" href="#messages">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg>
+                        <span>Messages</span>
+                        <span class="nav-count">3</span>
+                    </a>
+                    <a class="nav-link" href="#saved">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-4-6 4z"/></svg>
+                        <span>Bookmarks</span>
+                    </a>
+                </nav>
+
+                <div class="sidebar-divider"></div>
+                <div class="section-heading">
+                    <span>YOUR CIRCLES</span>
+                    <button class="small-icon-button" type="button" aria-label="Add a circle">+</button>
+                </div>
+                <nav class="circle-list" aria-label="Your circles">
+                    <a href="#design" class="circle-link"><span class="circle-icon circle-lilac">✳</span> Design people <span class="circle-unread"></span></a>
+                    <a href="#film" class="circle-link"><span class="circle-icon circle-orange">◉</span> Film &amp; photo</a>
+                    <a href="#slow" class="circle-link"><span class="circle-icon circle-green">⌁</span> Slow living</a>
+                </nav>
+
+                <div class="sidebar-bottom">
+                    <div class="sidebar-promo">
+                        <div class="promo-orbit" aria-hidden="true">✦</div>
+                        <strong>Your corner of the internet.</strong>
+                        <span>Make it a little more yours.</span>
+                        <button class="text-button" type="button" data-toast="Your profile is looking good!">Customize profile <span>→</span></button>
+                    </div>
+                    <a class="nav-link settings-link" href="#settings">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.7-1.4-2.4L5.3 15a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.7-1L9 7.4h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.7 1.4 2.4-1.4 1.1a8 8 0 0 1-.1 2z"/></svg>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="feed-column" id="feed">
+            <div class="feed-heading">
+                <div>
+                    <p class="eyebrow">THURSDAY, NOVEMBER 5</p>
+                    <h1>Your feed<span class="heading-period">.</span></h1>
+                </div>
+                <button class="feed-options icon-button" type="button" aria-label="Feed options" data-toast="Your feed is all yours."> 
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+                </button>
+            </div>
+
+            <div class="feed-tabs" role="tablist" aria-label="Feed">
+                <button class="feed-tab active" type="button" role="tab" aria-selected="true" data-filter="for-you">For you <span class="tab-spark">✦</span></button>
+                <button class="feed-tab" type="button" role="tab" aria-selected="false" data-filter="following">Following</button>
+                <button class="feed-tab" type="button" role="tab" aria-selected="false" data-filter="latest">Latest</button>
+            </div>
+
+            <form class="composer card" id="composer-form">
+                <img class="avatar avatar-current" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=96&h=96&q=80" alt="">
+                <div class="composer-main">
+                    <label class="sr-only" for="post-input">Share something with your circles</label>
+                    <textarea id="post-input" rows="2" maxlength="500" placeholder="What’s on your mind, Alex?"></textarea>
+                    <div class="composer-footer">
+                        <div class="composer-tools">
+                            <button type="button" class="tool-button" data-toast="Photo uploads are coming soon." aria-label="Add a photo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="8.5" cy="9" r="1.5"/><path d="m21 15-5-5L5 20"/></svg></button>
+                            <button type="button" class="tool-button" data-toast="Pick a feeling to share." aria-label="Add a feeling"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></button>
+                            <span class="composer-hint">Share with your circles</span>
+                        </div>
+                        <button class="button button-primary post-button" type="submit">Post <span>↗</span></button>
+                    </div>
+                </div>
+            </form>
+
+            <section class="posts" aria-label="Recent posts" id="posts">
+                <article class="post-card card" data-author="jules" data-time="3" data-following="true">
+                    <div class="post-header">
+                        <img class="avatar" src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=96&h=96&q=80" alt="">
+                        <div class="post-byline">
+                            <div class="name-line"><a href="#jules" class="person-name">Jules Rivera</a><span class="verified" aria-label="Verified">✦</span><span class="post-time">· 3h</span></div>
+                            <span class="post-handle">@julesmakes</span>
+                        </div>
+                        <button class="post-menu icon-button" type="button" aria-label="More options" data-toast="More post options"> 
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+                        </button>
+                    </div>
+                    <div class="post-content">
+                        <p>Alpenglow, glassy tarns, Dolomite crags. <span class="hashtag">#alpenglow</span></p>
+                    </div>
+                    <figure class="post-image landscape-image">
+                        <img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&h=720&q=85" alt="Golden evening light across a calm alpine lake and distant mountains">
+                        <figcaption class="image-caption"><span>Somewhere in the Dolomites</span><span>46° 28' N &nbsp;·&nbsp; 11° 46' E</span></figcaption>
+                    </figure>
+                    <div class="post-actions">
+                        <button class="action-button like-button" type="button" aria-pressed="false" aria-label="Like post">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.7c0 4.2-8.8 10-8.8 10S3.2 12.9 3.2 8.7A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.5z"/></svg><span class="like-count">128</span>
+                        </button>
+                        <button class="action-button reply-button" type="button" aria-label="Reply to post" data-toast="Replies are on their way.">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg><span>12</span>
+                        </button>
+                        <button class="action-button share-button" type="button" aria-label="Share post" data-share>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+                        </button>
+                        <button class="action-button bookmark-button" type="button" aria-pressed="false" aria-label="Bookmark post">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-4-6 4z"/></svg>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="post-card card" data-author="noah" data-time="5" data-following="false">
+                    <div class="post-header">
+                        <img class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=96&h=96&q=80" alt="">
+                        <div class="post-byline">
+                            <div class="name-line"><a href="#noah" class="person-name">Noah Kim</a><span class="post-time">· 5h</span></div>
+                            <span class="post-handle">@noahafterhours</span>
+                        </div>
+                        <button class="follow-button" type="button" aria-pressed="false">Follow <span>+</span></button>
+                    </div>
+                    <div class="post-content">
+                        <p>Darth Vader minifig brandishes scarlet lightsaber; obsidian armor, crimson glow. <span class="hashtag">#legovader</span></p>
+                    </div>
+                    <figure class="post-image vader-image">
+                        <img src="images/legovader.png" alt="LEGO Darth Vader minifigure with a glowing red lightsaber">
+                    </figure>
+                    <div class="post-actions">
+                        <button class="action-button like-button" type="button" aria-pressed="false" aria-label="Like post">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.7c0 4.2-8.8 10-8.8 10S3.2 12.9 3.2 8.7A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.5z"/></svg><span class="like-count">64</span>
+                        </button>
+                        <button class="action-button reply-button" type="button" aria-label="Reply to post" data-toast="Replies are on their way.">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg><span>8</span>
+                        </button>
+                        <button class="action-button share-button" type="button" aria-label="Share post" data-share>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+                        </button>
+                        <button class="action-button bookmark-button" type="button" aria-pressed="false" aria-label="Bookmark post">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-4-6 4z"/></svg>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="post-card card" data-author="maya" data-time="8" data-following="true">
+                    <div class="post-header">
+                        <img class="avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=96&h=96&q=80" alt="">
+                        <div class="post-byline">
+                            <div class="name-line"><a href="#maya" class="person-name">Maya Patel</a><span class="post-time">· 8h</span></div>
+                            <span class="post-handle">@mayaseesit</span>
+                        </div>
+                        <button class="post-menu icon-button" type="button" aria-label="More options" data-toast="More post options">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>
+                        </button>
+                    </div>
+                    <div class="post-content">
+                        <p>Sourdough, fern fronds, lamplight. <span class="hashtag">#softsunday</span> 🌿</p>
+                    </div>
+                    <div class="post-actions">
+                        <button class="action-button like-button liked" type="button" aria-pressed="true" aria-label="Unlike post">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.7c0 4.2-8.8 10-8.8 10S3.2 12.9 3.2 8.7A4.7 4.7 0 0 1 12 6.2a4.7 4.7 0 0 1 8.8 2.5z"/></svg><span class="like-count">203</span>
+                        </button>
+                        <button class="action-button reply-button" type="button" aria-label="Reply to post" data-toast="Replies are on their way.">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg><span>24</span>
+                        </button>
+                        <button class="action-button share-button" type="button" aria-label="Share post" data-share>
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m-5 5 5-5 5 5"/><path d="M5 13v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+                        </button>
+                        <button class="action-button bookmark-button" type="button" aria-pressed="false" aria-label="Bookmark post">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.8A1.8 1.8 0 0 1 7.8 3h8.4A1.8 1.8 0 0 1 18 4.8V21l-6-4-6 4z"/></svg>
+                        </button>
+                    </div>
+                </article>
+                <p class="empty-state" id="empty-state" hidden>No posts found. Try another search or check back later.</p>
+            </section>
+            <button class="load-more" type="button" data-toast="You’re all caught up for now.">You’re all caught up <span>✦</span></button>
+        </main>
+
+        <aside class="right-rail" aria-label="Discover">
+            <section class="rail-section" id="discover">
+                <div class="rail-title-row"><h2>People to know</h2><a href="#people" class="quiet-link">See all</a></div>
+                <div class="suggestion-list">
+                    <div class="suggestion">
+                        <img class="avatar" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=96&h=96&q=80" alt="">
+                        <div class="suggestion-info"><strong>Leo Park</strong><span>Illustrator · Brooklyn</span></div>
+                        <button class="suggestion-follow follow-button" type="button" aria-pressed="false" aria-label="Follow Leo Park">+</button>
+                    </div>
+                    <div class="suggestion">
+                        <img class="avatar" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=96&h=96&q=80" alt="">
+                        <div class="suggestion-info"><strong>Amara Okafor</strong><span>Photographer · London</span></div>
+                        <button class="suggestion-follow follow-button" type="button" aria-pressed="false" aria-label="Follow Amara Okafor">+</button>
+                    </div>
+                    <div class="suggestion">
+                        <img class="avatar" src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=96&h=96&q=80" alt="">
+                        <div class="suggestion-info"><strong>Ellie Chen</strong><span>Writer · San Francisco</span></div>
+                        <button class="suggestion-follow follow-button" type="button" aria-pressed="false" aria-label="Follow Ellie Chen">+</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="trending-card" aria-labelledby="trending-heading">
+                <div class="rail-title-row"><h2 id="trending-heading">Small things, lately</h2><span class="trending-spark">✳</span></div>
+                <a class="trend-item" href="#slowdays"><span class="trend-label">A LITTLE LESS NOISE</span><strong>#slowdays</strong><span>2.4k people sharing</span></a>
+                <a class="trend-item" href="#deskreset"><span class="trend-label">CREATIVE PRACTICE</span><strong>#deskreset</strong><span>1,082 people sharing</span></a>
+                <a class="trend-item" href="#softlaunch"><span class="trend-label">LIFE LATELY</span><strong>#softlaunch</strong><span>864 people sharing</span></a>
+                <a class="explore-link" href="#trending">Explore all conversations <span>↗</span></a>
+            </section>
+
+            <div class="right-footer">
+                <span>About</span><span>Guidelines</span><span>Privacy</span><span>© 2026 Orbit</span>
+                <p>A little more human, a little less loud.</p>
+            </div>
+        </aside>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <a href="#feed" class="mobile-nav-item active" aria-label="Home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/></svg></a>
+        <a href="#discover" class="mobile-nav-item" aria-label="Explore"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4.5 4.5"/></svg></a>
+        <button class="mobile-compose" type="button" aria-label="Write a post" id="mobile-compose">+</button>
+        <a href="#messages" class="mobile-nav-item" aria-label="Messages"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg></a>
+        <a href="#profile" class="mobile-nav-item" aria-label="Profile"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=96&h=96&q=80" alt=""></a>
+    </nav>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
