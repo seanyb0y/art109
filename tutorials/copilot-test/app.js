@@ -152,7 +152,9 @@ async function requestCommunitySites(path, options = {}) {
         throw new Error(`Supabase request failed (${response.status}): ${details.slice(0, 240)}`);
     }
     if (response.status === 204) return [];
-    return response.json();
+
+    const body = await response.text();
+    return body.trim() ? JSON.parse(body) : [];
 }
 
 function createSvgThread(x1, y1, x2, y2, className) {
@@ -512,18 +514,25 @@ makerForm.addEventListener("submit", async (event) => {
                     color: site.color
                 })
             });
-            const publishedSites = await requestCommunitySites("?select=id,created_at,name,handle,about,color&order=created_at.asc");
-            renderCommunityWeb(publishedSites);
-            communityStatus.textContent = "YOUR SITE IS PUBLISHED ON THE SHARED NETWORK.";
-            previewAddress.textContent = "NET SURFER / PUBLISHED";
-            document.querySelector("#community-web").scrollIntoView({ behavior: "smooth", block: "start" });
-            showToast("YOUR SITE IS LIVE ON THE SHARED WEB.");
         } catch (error) {
             communityStatus.textContent = `PUBLISHING FAILED: ${error.message}`;
             showToast("YOUR SITE WAS NOT PUBLISHED. CHECK THE SHARED NETWORK STATUS.");
-        } finally {
             submitButton.disabled = false;
+            return;
         }
+
+        previewAddress.textContent = "NET SURFER / PUBLISHED";
+        try {
+            const publishedSites = await requestCommunitySites("?select=id,created_at,name,handle,about,color&order=created_at.asc");
+            renderCommunityWeb(publishedSites);
+            communityStatus.textContent = "YOUR SITE IS PUBLISHED ON THE SHARED NETWORK.";
+            document.querySelector("#community-web").scrollIntoView({ behavior: "smooth", block: "start" });
+            showToast("YOUR SITE IS LIVE ON THE SHARED WEB.");
+        } catch (error) {
+            communityStatus.textContent = `SITE PUBLISHED, BUT THE WEB COULD NOT REFRESH: ${error.message}`;
+            showToast("YOUR SITE IS LIVE. REFRESH THE PAGE TO UPDATE THE WEB.");
+        }
+        submitButton.disabled = false;
         return;
     }
 
