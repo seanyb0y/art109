@@ -40,6 +40,7 @@ const communityStorageKey = "net-surfer-community-sites-v1";
 const localMigrationKey = "net-surfer-sites-migrated-to-supabase-v1";
 const siteColors = new Set(["#69ff9e", "#ff5de4", "#6ee7ff", "#ffbd59"]);
 
+// The browser uses only the HTTPS Supabase project origin with its public key.
 function getSupabaseEndpoint() {
     if (typeof supabaseConfig.url !== "string" || typeof supabaseConfig.anonKey !== "string") return null;
     if (!supabaseConfig.url.trim() || !supabaseConfig.anonKey.trim()) return null;
@@ -66,6 +67,7 @@ function showToast(message) {
     toastTimeout = window.setTimeout(() => toast.classList.remove("visible"), 2300);
 }
 
+// User-entered text is inserted into a generated HTML document, so escape it first.
 function escapeHtml(value) {
     return value.replace(/[&<>"']/g, (character) => ({
         "&": "&amp;",
@@ -153,6 +155,7 @@ async function requestCommunitySites(path, options = {}) {
     }
     if (response.status === 204) return [];
 
+    // Supabase may return an empty body for successful minimal-response writes.
     const body = await response.text();
     return body.trim() ? JSON.parse(body) : [];
 }
@@ -180,6 +183,7 @@ function createSiteUrl(site, usePersistentPage) {
     return url;
 }
 
+// Arrange each site on a spiral and connect it to the central hub and nearby nodes.
 function renderCommunityWeb(sites, usePersistentPages = isSupabaseConfigured()) {
     communityNodes.replaceChildren();
     communityConnections.replaceChildren();
@@ -248,6 +252,7 @@ async function refreshCommunityWeb() {
 
     communityStatus.textContent = "CONNECTING TO THE SHARED SITE NETWORK…";
     try {
+        // Preserve older browser-only sites by copying them to Supabase once per browser.
         const migrated = localStorage.getItem(localMigrationKey) === "true";
         const localSites = migrated ? [] : loadCommunitySites();
         if (localSites.length) {
@@ -281,6 +286,7 @@ function zoomWebAt(nextScale, clientX, clientY) {
     const scale = Math.min(3, Math.max(0.55, nextScale));
     const ratio = scale / webScale;
 
+    // Adjust translation with scale so the point under the pointer stays in place.
     webOffsetX = pointerX - (pointerX - webOffsetX) * ratio;
     webOffsetY = pointerY - (pointerY - webOffsetY) * ratio;
     webScale = scale;
@@ -303,6 +309,7 @@ function getPointerCenter(first, second) {
 }
 
 function handleWebPointerDown(event) {
+    // Let node links and the zoom controls keep their normal click behavior.
     if (event.target.closest(".web-controls, .web-node")) return;
     event.preventDefault();
     webField.setPointerCapture(event.pointerId);
@@ -334,6 +341,7 @@ function handleWebPointerMove(event) {
     if (!webPointers.has(event.pointerId)) return;
     webPointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
 
+    // Two active pointers zoom around their midpoint; one pointer pans the map.
     if (webPointers.size > 1 && pinchOrigin) {
         const [first, second] = [...webPointers.values()];
         const center = getPointerCenter(first, second);
@@ -503,6 +511,7 @@ makerForm.addEventListener("submit", async (event) => {
         const submitButton = makerForm.querySelector('button[type="submit"]');
         submitButton.disabled = true;
         communityStatus.textContent = "PUBLISHING YOUR SITE TO THE SHARED NETWORK…";
+        // Publish only the validated fields; the generated preview stays local.
         try {
             await requestCommunitySites("", {
                 method: "POST",
@@ -585,6 +594,7 @@ function startDataRain() {
     let frame = 0;
 
     function resizeCanvas() {
+        // Match the canvas backing resolution to the display for crisp rain glyphs.
         const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
         width = window.innerWidth;
         height = window.innerHeight;

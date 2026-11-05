@@ -1,4 +1,5 @@
 :root {
+    /* site.js replaces this accent with the site's allowlisted color. */
     color-scheme: dark;
     --signal: #69ff9e;
     --bg: #080d0a;

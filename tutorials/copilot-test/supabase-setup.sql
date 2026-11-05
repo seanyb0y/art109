@@ -1,3 +1,4 @@
+-- Store each public site with bounded fields and an allowlisted accent color.
 create table if not exists public.community_sites (
     id uuid primary key default gen_random_uuid(),
     created_at timestamptz not null default now(),
@@ -10,6 +11,7 @@ create table if not exists public.community_sites (
 
 alter table public.community_sites enable row level security;
 
+-- Visitors can read and publish, but the table policies still constrain inserts.
 drop policy if exists "Anyone can read community sites" on public.community_sites;
 create policy "Anyone can read community sites"
     on public.community_sites

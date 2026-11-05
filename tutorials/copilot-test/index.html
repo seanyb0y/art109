@@ -217,6 +217,7 @@
                 </form>
                 <div class="site-preview-wrap">
                     <div class="preview-bar"><span>LIVE PREVIEW</span><span id="preview-address">YOUR-SITE.NET</span></div>
+                    <!-- Keep generated previews sandboxed; their static page needs no script permission. -->
                     <iframe id="site-preview" title="Preview of your generated website" sandbox srcdoc="<!doctype html><html lang='en'><meta charset='utf-8'><body style='margin:0;background:#080d0a;color:#a6b0a7;font:14px monospace;display:grid;place-items:center;min-height:100vh;text-align:center'><div><div style='color:#69ff9e;font-size:28px'>⌁</div><p>YOUR NEW SIGNAL WILL APPEAR HERE</p></div></body></html>"></iframe>
                     <a class="download-site" id="download-site" href="#" download="my-corner.html" hidden>DOWNLOAD YOUR SITE <span>↓</span></a>
                 </div>
@@ -237,6 +238,7 @@
                 <span class="local-badge"><span class="live-dot"></span> SHARED NETWORK</span>
             </div>
             <div class="web-field" id="web-field" role="region" aria-label="Interactive spiderweb of published Net Surfer sites" tabindex="0">
+                <!-- Threads, hub, and site nodes move together during pan and zoom. -->
                 <div class="web-world" id="web-world">
                     <svg class="web-threads" id="web-threads" viewBox="0 0 1000 500" preserveAspectRatio="none" aria-hidden="true">
                         <circle class="web-orbit orbit-outer" cx="500" cy="250" r="205"></circle>

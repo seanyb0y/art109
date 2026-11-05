@@ -18,6 +18,7 @@ function getSiteApi() {
 }
 
 async function loadSite() {
+    // Validate the query value before using it in a PostgREST filter.
     const id = new URLSearchParams(window.location.search).get("id");
     const api = getSiteApi();
     if (!id || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(id)) {
@@ -47,6 +48,7 @@ async function loadSite() {
             return;
         }
 
+        // Render database content as text, never as executable markup.
         siteName.textContent = site.name;
         siteHandle.textContent = `@${site.handle}`;
         siteAbout.textContent = site.about;
