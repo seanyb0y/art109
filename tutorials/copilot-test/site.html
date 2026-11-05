@@ -15,8 +15,29 @@
         <h1 id="site-name">Connecting…</h1>
         <p class="handle" id="site-handle"></p>
         <div class="rule"></div>
+        <img class="site-image" id="site-image" alt="" hidden>
         <p class="about" id="site-about"></p>
         <p class="status" id="site-status" role="status" aria-live="polite">Retrieving this signal from the shared network…</p>
+        <section class="replies" id="replies-section" aria-labelledby="replies-title" hidden>
+            <div class="replies-heading">
+                <h2 id="replies-title">Replies</h2>
+                <span id="reply-count">0 SIGNALS</span>
+            </div>
+            <p class="replies-status" id="replies-status" role="status" aria-live="polite">Loading replies…</p>
+            <ol class="reply-list" id="reply-list" aria-live="polite"></ol>
+            <form class="reply-form" id="reply-form">
+                <label>
+                    <span>YOUR HANDLE</span>
+                    <input id="reply-handle" name="handle" type="text" maxlength="24" autocomplete="nickname" placeholder="stardrifter" required>
+                </label>
+                <label>
+                    <span>YOUR REPLY</span>
+                    <textarea id="reply-message" name="message" rows="3" maxlength="500" placeholder="Leave a thoughtful signal…" required></textarea>
+                </label>
+                <button type="submit">SEND REPLY <span>↗</span></button>
+                <p class="reply-note">Replies are public and linked to this site.</p>
+            </form>
+        </section>
         <footer>ONE SMALL CORNER OF THE WEB &nbsp;·&nbsp; <span>BUILT WITH NET SURFER</span></footer>
         <a class="back-link" href="index.html#community-web">← RETURN TO THE SHARED WEB</a>
     </main>

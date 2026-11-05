@@ -187,7 +187,7 @@
             </div>
             <div class="maker-heading">
                 <h2 id="maker-title">Don’t just browse.<br><span>Leave a signal.</span></h2>
-                <p class="section-description">Make a tiny site of your own and publish it to the shared web, or download a standalone copy.</p>
+                <p class="section-description">Make a tiny site, attach an image, and publish it to the shared web—or download a standalone copy.</p>
             </div>
             <div class="maker-layout">
                 <form class="maker-form" id="maker-form">
@@ -212,8 +212,12 @@
                             <option value="#ffbd59">SOLAR AMBER</option>
                         </select>
                     </label>
+                    <label class="maker-field">
+                        <span>ATTACH AN IMAGE <span class="maker-field-hint">PNG / JPG / WEBP · MAX 5 MB</span></span>
+                        <input id="site-image" name="siteImage" type="file" accept="image/png,image/jpeg,image/webp">
+                    </label>
                     <button class="route-submit maker-submit" type="submit">GENERATE MY SITE <span>↗</span></button>
-                    <p class="maker-note">NO ACCOUNT NEEDED. WITH SUPABASE CONNECTED, YOUR SITE IS PUBLISHED TO THE SHARED WEB.</p>
+                    <p class="maker-note">NO ACCOUNT NEEDED. PUBLISHED SITES AND ATTACHED IMAGES ARE PUBLIC.</p>
                 </form>
                 <div class="site-preview-wrap">
                     <div class="preview-bar"><span>LIVE PREVIEW</span><span id="preview-address">YOUR-SITE.NET</span></div>
@@ -222,7 +226,7 @@
                     <a class="download-site" id="download-site" href="#" download="my-corner.html" hidden>DOWNLOAD YOUR SITE <span>↓</span></a>
                 </div>
             </div>
-            <p class="hosting-note">Shared-web pages are hosted by Net Surfer. Download a copy anytime; without Supabase setup, your entries stay in this browser only.</p>
+            <p class="hosting-note">Shared-web pages and uploaded images are public. Download a copy anytime; without Supabase setup, your entries stay in this browser only.</p>
         </section>
 
         <section class="community-section" id="community-web" aria-labelledby="community-title">

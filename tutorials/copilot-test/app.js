@@ -13,6 +13,7 @@ const siteNameInput = document.querySelector("#site-name");
 const siteHandleInput = document.querySelector("#site-handle");
 const siteAboutInput = document.querySelector("#site-about");
 const siteColorInput = document.querySelector("#site-color");
+const siteImageInput = document.querySelector("#site-image");
 const sitePreview = document.querySelector("#site-preview");
 const previewAddress = document.querySelector("#preview-address");
 const downloadSite = document.querySelector("#download-site");
@@ -24,21 +25,35 @@ const communityStatus = document.querySelector("#web-storage-status");
 const webField = document.querySelector("#web-field");
 const webWorld = document.querySelector("#web-world");
 const webZoomLevel = document.querySelector("#web-zoom-level");
+const webThreads = document.querySelector("#web-threads");
+const webOrbits = [...document.querySelectorAll(".web-orbit")];
 const webPointers = new Map();
 const supabaseConfig = window.NET_SURFER_SUPABASE || {};
 
 let toastTimeout;
 let downloadUrl;
 let communitySiteUrls = [];
+let communityPositions = [];
 let webScale = 1;
 let webOffsetX = 0;
 let webOffsetY = 0;
+let webBaseOffsetX = 0;
+let webBaseOffsetY = 0;
+let webLayoutScale = 1;
 let dragOrigin = null;
 let pinchOrigin = null;
 
 const communityStorageKey = "net-surfer-community-sites-v1";
 const localMigrationKey = "net-surfer-sites-migrated-to-supabase-v1";
 const siteColors = new Set(["#69ff9e", "#ff5de4", "#6ee7ff", "#ffbd59"]);
+const allowedImageTypes = new Map([
+    ["image/png", "png"],
+    ["image/jpeg", "jpg"],
+    ["image/webp", "webp"]
+]);
+const maxImageSize = 5 * 1024 * 1024;
+const mapBaseWidth = 1000;
+const mapBaseHeight = 500;
 
 // The browser uses only the HTTPS Supabase project origin with its public key.
 function getSupabaseEndpoint() {
@@ -60,6 +75,60 @@ function isSupabaseConfigured() {
     return Boolean(supabaseEndpoint && supabaseConfig.anonKey);
 }
 
+function createSiteId() {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (character) => {
+        const random = Math.random() * 16 | 0;
+        return (character === "x" ? random : (random & 3 | 8)).toString(16);
+    });
+}
+
+function readImageAsDataUrl(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.addEventListener("load", () => {
+            if (typeof reader.result === "string") resolve(reader.result);
+            else reject(new Error("The selected image could not be read."));
+        }, { once: true });
+        reader.addEventListener("error", () => reject(new Error("The selected image could not be read.")), { once: true });
+        reader.readAsDataURL(file);
+    });
+}
+
+function getPublicSiteImageUrl(imagePath, siteId) {
+    if (typeof imagePath !== "string" || !new RegExp(`^${siteId}/[0-9a-f-]{36}\\.(png|jpg|webp)$`, "i").test(imagePath)) {
+        return null;
+    }
+
+    const encodedPath = imagePath.split("/").map(encodeURIComponent).join("/");
+    return `${supabaseEndpoint}/storage/v1/object/public/community-site-images/${encodedPath}`;
+}
+
+async function uploadSiteImage(siteId, file) {
+    const extension = allowedImageTypes.get(file.type);
+    if (!extension) throw new Error("Choose a PNG, JPEG, or WebP image.");
+    if (file.size > maxImageSize) throw new Error("Images must be 5 MB or smaller.");
+
+    const path = `${siteId}/${createSiteId()}.${extension}`;
+    const response = await fetch(`${supabaseEndpoint}/storage/v1/object/community-site-images/${path.split("/").map(encodeURIComponent).join("/")}`, {
+        method: "POST",
+        headers: {
+            apikey: supabaseConfig.anonKey,
+            Authorization: `Bearer ${supabaseConfig.anonKey}`,
+            "Content-Type": file.type,
+            "x-upsert": "false"
+        },
+        body: file
+    });
+
+    if (!response.ok) {
+        const details = await response.text();
+        throw new Error(`Image upload failed (${response.status}): ${details.slice(0, 240)}`);
+    }
+
+    return path;
+}
+
 function showToast(message) {
     toast.textContent = message;
     toast.classList.add("visible");
@@ -78,10 +147,11 @@ function escapeHtml(value) {
     })[character]);
 }
 
-function createPersonalSite({ name, handle, about, color }) {
+function createPersonalSite({ name, handle, about, color, imageData }) {
     const safeName = escapeHtml(name);
     const safeHandle = escapeHtml(handle);
     const safeAbout = escapeHtml(about);
+    const safeImageData = imageData ? escapeHtml(imageData) : "";
 
     return `<!doctype html>
 <html lang="en">
@@ -99,6 +169,7 @@ main{width:min(100%,680px);padding:clamp(28px,7vw,68px);border:1px solid color-m
 h1{margin:28px 0 6px;font:600 clamp(38px,9vw,76px)/1.02 system-ui,sans-serif;letter-spacing:-.06em}
 .handle{color:var(--signal);font-size:13px}
 .rule{height:1px;margin:32px 0;background:color-mix(in srgb,var(--signal) 28%,transparent)}
+.site-image{display:block;max-width:100%;max-height:480px;margin:0 0 24px;border:1px solid color-mix(in srgb,var(--signal) 30%,transparent);object-fit:contain}
 .about{max-width:48ch;color:var(--muted);font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
 footer{margin-top:42px;color:#627167;font-size:10px;letter-spacing:.08em}
 footer span{color:var(--signal)}
@@ -110,6 +181,7 @@ footer span{color:var(--signal)}
 <h1>${safeName}</h1>
 <div class="handle">@${safeHandle}</div>
 <div class="rule"></div>
+${safeImageData ? `<img class="site-image" src="${safeImageData}" alt="Image attached to ${safeName}">` : ""}
 <div class="about">${safeAbout}</div>
 <footer>ONE SMALL CORNER OF THE WEB &nbsp;·&nbsp; <span>BUILT WITH NET SURFER</span></footer>
 </main>
@@ -160,6 +232,24 @@ async function requestCommunitySites(path, options = {}) {
     return body.trim() ? JSON.parse(body) : [];
 }
 
+async function requestReplyCounts() {
+    const response = await fetch(`${supabaseEndpoint}/rest/v1/community_site_reply_counts?select=site_id,reply_count`, {
+        headers: {
+            apikey: supabaseConfig.anonKey,
+            Authorization: `Bearer ${supabaseConfig.anonKey}`
+        }
+    });
+
+    if (!response.ok) {
+        const details = await response.text();
+        throw new Error(`Supabase reply counts failed (${response.status}): ${details.slice(0, 240)}`);
+    }
+
+    const body = await response.text();
+    const rows = body.trim() ? JSON.parse(body) : [];
+    return new Map(rows.map((row) => [row.site_id, Number(row.reply_count)]));
+}
+
 function createSvgThread(x1, y1, x2, y2, className) {
     const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line.setAttribute("class", className);
@@ -183,38 +273,126 @@ function createSiteUrl(site, usePersistentPage) {
     return url;
 }
 
-// Arrange each site on a spiral and connect it to the central hub and nearby nodes.
-function renderCommunityWeb(sites, usePersistentPages = isSupabaseConfigured()) {
+function adjustReplyBadgePositions() {
+    const nodes = [...communityNodes.querySelectorAll(".web-node")];
+    nodes.forEach((node) => node.querySelector(".web-node-replies").style.removeProperty("left"));
+    if (!window.matchMedia("(max-width: 600px)").matches) return;
+
+    const overlaps = (first, second) =>
+        first.left < second.right && first.right > second.left &&
+        first.top < second.bottom && first.bottom > second.top;
+    const shifts = [0, -16, 16, -24, 24, -32, 32, -40, 40, -48, 48];
+    const nodeSize = window.matchMedia("(max-width: 370px)").matches ? 32 : 36;
+    const width = webField.clientWidth;
+    const height = webField.clientHeight;
+    const badgeShifts = [];
+    const centerFor = ({ angle, radius }) => ({
+        x: (width / 2 + Math.cos(angle) * 425 * radius * width / mapBaseWidth * webLayoutScale) * webScale + webOffsetX,
+        y: (height / 2 + Math.sin(angle) * 205 * radius * height / mapBaseHeight * webLayoutScale) * webScale + webOffsetY
+    });
+    const badgeFor = (index, shift) => {
+        const center = centerFor(communityPositions[index]);
+        const badge = nodes[index].querySelector(".web-node-replies");
+        const badgeWidth = badge.offsetWidth * webScale;
+        const badgeHeight = badge.offsetHeight * webScale;
+        const x = center.x + shift * webScale;
+        return {
+            left: x - badgeWidth / 2,
+            right: x + badgeWidth / 2,
+            top: center.y + (57 - nodeSize / 2) * webScale,
+            bottom: center.y + (57 - nodeSize / 2) * webScale + badgeHeight
+        };
+    };
+
+    nodes.forEach((node, index) => {
+        const badge = node.querySelector(".web-node-replies");
+        let bestShift = 0;
+        let bestScore = Infinity;
+
+        shifts.forEach((shift) => {
+            const badgeBounds = badgeFor(index, shift);
+            let score = badgeBounds.left < 0 || badgeBounds.right > width ? 4 : 0;
+
+            communityPositions.forEach((position, otherIndex) => {
+                if (otherIndex === index) return;
+                const center = centerFor(position);
+                const otherNode = {
+                    left: center.x - nodeSize * webScale / 2,
+                    right: center.x + nodeSize * webScale / 2,
+                    top: center.y - nodeSize * webScale / 2,
+                    bottom: center.y + nodeSize * webScale / 2
+                };
+                if (overlaps(badgeBounds, otherNode)) score += 2;
+                if (overlaps(badgeBounds, badgeFor(otherIndex, badgeShifts[otherIndex] || 0))) score += 1;
+            });
+
+            if (score < bestScore) {
+                bestScore = score;
+                bestShift = shift;
+            }
+        });
+
+        badgeShifts[index] = bestShift;
+        badge.style.left = `${node.offsetWidth / 2 + bestShift}px`;
+    });
+}
+
+// Place sites on expanding rings so icons, labels, and reply counters have room.
+function renderCommunityWeb(sites, usePersistentPages = isSupabaseConfigured(), replyCounts = new Map(), countsAvailable = true) {
     communityNodes.replaceChildren();
     communityConnections.replaceChildren();
     communitySiteUrls.forEach((url) => URL.revokeObjectURL(url));
     communitySiteUrls = [];
 
+    const positions = sites.map((site, index) => {
+        const ring = Math.floor(index / 8);
+        const angle = (index % 8) * (Math.PI / 4) - Math.PI / 2 + (ring % 2) * (Math.PI / 8);
+        const radius = 0.42 + ring * 0.46;
+        return { site, angle, radius };
+    });
+    communityPositions = positions;
+    const outerRadius = positions.reduce((largest, position) => Math.max(largest, position.radius), 0);
+    const mapScale = Math.max(1, outerRadius / 0.9);
+    webLayoutScale = mapScale;
+    const mapWidth = mapBaseWidth * mapScale;
+    const mapHeight = mapBaseHeight * mapScale;
+    webWorld.style.width = `${mapScale * 100}%`;
+    webWorld.style.height = `${mapScale * 100}%`;
+    webThreads.setAttribute("viewBox", `0 0 ${mapWidth} ${mapHeight}`);
+    webOrbits.forEach((orbit) => {
+        orbit.setAttribute("cx", String(mapWidth / 2));
+        orbit.setAttribute("cy", String(mapHeight / 2));
+        const baseRadius = orbit.classList.contains("orbit-outer")
+            ? 205
+            : orbit.classList.contains("orbit-inner") ? 130 : 58;
+        orbit.setAttribute("r", String(baseRadius * mapScale));
+    });
+    webBaseOffsetX = (webField.clientWidth - webField.clientWidth * mapScale) / 2;
+    webBaseOffsetY = (webField.clientHeight - webField.clientHeight * mapScale) / 2;
+    webOffsetX = webBaseOffsetX;
+    webOffsetY = webBaseOffsetY;
+    webScale = 1;
+    applyWebTransform();
+
     communityEmpty.hidden = sites.length > 0;
     communityCount.textContent = String(sites.length).padStart(2, "0");
 
-    sites.forEach((site, index) => {
-        const angle = index * 2.399963229728653 - Math.PI / 2;
-        const radius = 0.2 + 0.27 * (1 - Math.exp(-index / 6));
-        const x = 500 + Math.cos(angle) * 425 * radius;
-        const y = 250 + Math.sin(angle) * 205 * radius;
+    positions.forEach(({ site, angle, radius }, index) => {
+        const x = (mapBaseWidth / 2 + Math.cos(angle) * 425 * radius) * mapScale;
+        const y = (mapBaseHeight / 2 + Math.sin(angle) * 205 * radius) * mapScale;
 
-        createSvgThread(500, 250, x, y, "web-spoke");
+        createSvgThread(mapWidth / 2, mapHeight / 2, x, y, "web-spoke");
         if (index > 0) {
-            const previousIndex = index - 1;
-            const previousAngle = previousIndex * 2.399963229728653 - Math.PI / 2;
-            const previousRadius = 0.2 + 0.27 * (1 - Math.exp(-previousIndex / 6));
-            const previousX = 500 + Math.cos(previousAngle) * 425 * previousRadius;
-            const previousY = 250 + Math.sin(previousAngle) * 205 * previousRadius;
+            const previous = positions[index - 1];
+            const previousX = (mapBaseWidth / 2 + Math.cos(previous.angle) * 425 * previous.radius) * mapScale;
+            const previousY = (mapBaseHeight / 2 + Math.sin(previous.angle) * 205 * previous.radius) * mapScale;
             createSvgThread(previousX, previousY, x, y, "web-thread");
         }
         if (index > 2 && index % 2 === 0) {
-            const crossedIndex = index - 3;
-            const crossedAngle = crossedIndex * 2.399963229728653 - Math.PI / 2;
-            const crossedRadius = 0.2 + 0.27 * (1 - Math.exp(-crossedIndex / 6));
+            const crossed = positions[index - 3];
             createSvgThread(
-                500 + Math.cos(crossedAngle) * 425 * crossedRadius,
-                250 + Math.sin(crossedAngle) * 205 * crossedRadius,
+                (mapBaseWidth / 2 + Math.cos(crossed.angle) * 425 * crossed.radius) * mapScale,
+                (mapBaseHeight / 2 + Math.sin(crossed.angle) * 205 * crossed.radius) * mapScale,
                 x,
                 y,
                 "web-thread"
@@ -226,11 +404,22 @@ function renderCommunityWeb(sites, usePersistentPages = isSupabaseConfigured()) 
         node.href = createSiteUrl(site, usePersistentPages);
         node.target = "_blank";
         node.rel = "noopener noreferrer";
-        node.style.left = `${x / 10}%`;
-        node.style.top = `${y / 5}%`;
-        node.title = `Visit ${site.name} by @${site.handle}`;
-        node.setAttribute("aria-label", `Visit ${site.name}, created by @${site.handle}`);
-        node.textContent = site.name.trim().charAt(0).toUpperCase() || "⌁";
+        node.style.left = `${x / mapWidth * 100}%`;
+        node.style.top = `${y / mapHeight * 100}%`;
+        const replyCount = replyCounts.get(site.id) || 0;
+        const replyText = countsAvailable ? `${replyCount} ${replyCount === 1 ? "reply" : "replies"}` : "reply count unavailable";
+        node.title = `Visit ${site.name} by @${site.handle} · ${replyText}`;
+        node.setAttribute("aria-label", `Visit ${site.name}, created by @${site.handle}; ${replyText}`);
+        const imageUrl = getPublicSiteImageUrl(site.image_path, site.id);
+        if (imageUrl) {
+            const image = document.createElement("img");
+            image.className = "web-node-image";
+            image.src = imageUrl;
+            image.alt = "";
+            node.append(image);
+        } else {
+            node.textContent = site.name.trim().charAt(0).toUpperCase() || "⌁";
+        }
 
         const label = document.createElement("span");
         label.className = "web-node-label";
@@ -238,9 +427,14 @@ function renderCommunityWeb(sites, usePersistentPages = isSupabaseConfigured()) 
         const nodeId = document.createElement("span");
         nodeId.className = "web-node-id";
         nodeId.textContent = String(index + 1).padStart(2, "0");
-        node.append(label, nodeId);
+        const replyBadge = document.createElement("span");
+        replyBadge.className = "web-node-replies";
+        replyBadge.textContent = countsAvailable ? String(replyCount) : "—";
+        replyBadge.setAttribute("aria-hidden", "true");
+        node.append(label, nodeId, replyBadge);
         communityNodes.append(node);
     });
+    adjustReplyBadgePositions();
 }
 
 async function refreshCommunityWeb() {
@@ -264,10 +458,19 @@ async function refreshCommunityWeb() {
             });
             localStorage.setItem(localMigrationKey, "true");
         }
-        const sites = await requestCommunitySites("?select=id,created_at,name,handle,about,color&order=created_at.asc");
-        renderCommunityWeb(sites);
+        const sites = await requestCommunitySites("?select=id,created_at,name,handle,about,color,image_path&order=created_at.asc");
+        let replyCounts = new Map();
+        let countsAvailable = true;
+        let countWarning = "";
+        try {
+            replyCounts = await requestReplyCounts();
+        } catch (error) {
+            countsAvailable = false;
+            countWarning = ` REPLY COUNTS UNAVAILABLE: ${error.message}`;
+        }
+        renderCommunityWeb(sites, true, replyCounts, countsAvailable);
         const migrationNote = localSites.length ? ` MIGRATED ${localSites.length} LOCAL SITE${localSites.length === 1 ? "" : "S"}.` : "";
-        communityStatus.textContent = `${sites.length} SITE${sites.length === 1 ? "" : "S"} ON THE SHARED NETWORK.${migrationNote}`;
+        communityStatus.textContent = `${sites.length} SITE${sites.length === 1 ? "" : "S"} ON THE SHARED NETWORK.${migrationNote}${countWarning}`;
     } catch (error) {
         communityStatus.textContent = `SHARED NETWORK UNAVAILABLE: ${error.message}`;
         renderCommunityWeb(loadCommunitySites(), false);
@@ -295,8 +498,8 @@ function zoomWebAt(nextScale, clientX, clientY) {
 
 function resetWebView() {
     webScale = 1;
-    webOffsetX = 0;
-    webOffsetY = 0;
+    webOffsetX = webBaseOffsetX;
+    webOffsetY = webBaseOffsetY;
     applyWebTransform();
 }
 
@@ -476,6 +679,7 @@ makerForm.addEventListener("submit", async (event) => {
     const name = siteNameInput.value.trim();
     const handle = siteHandleInput.value.trim().replace(/^@+/, "");
     const about = siteAboutInput.value.trim();
+    const imageFile = siteImageInput.files[0] || null;
     const slug = handle.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     siteNameInput.setCustomValidity(name ? "" : "Enter a site name.");
     siteAboutInput.setCustomValidity(about ? "" : "Enter a short description.");
@@ -487,15 +691,41 @@ makerForm.addEventListener("submit", async (event) => {
         return;
     }
 
+    if (imageFile && !isSupabaseConfigured()) {
+        communityStatus.textContent = "CONNECT SUPABASE BEFORE ATTACHING AN IMAGE. IMAGES ARE STORED ON THE SHARED NETWORK.";
+        showToast("IMAGE ATTACHMENTS REQUIRE THE SHARED NETWORK.");
+        return;
+    }
+    if (imageFile && !allowedImageTypes.has(imageFile.type)) {
+        communityStatus.textContent = "IMAGE NOT ACCEPTED. CHOOSE A PNG, JPEG, OR WEBP FILE.";
+        showToast("CHOOSE A PNG, JPEG, OR WEBP IMAGE.");
+        return;
+    }
+    if (imageFile && imageFile.size > maxImageSize) {
+        communityStatus.textContent = "IMAGE NOT ACCEPTED. THE MAXIMUM IMAGE SIZE IS 5 MB.";
+        showToast("IMAGE MUST BE 5 MB OR SMALLER.");
+        return;
+    }
+
     siteHandleInput.setCustomValidity("");
+    let imageData = "";
+    if (imageFile) {
+        try {
+            imageData = await readImageAsDataUrl(imageFile);
+        } catch (error) {
+            communityStatus.textContent = `IMAGE PREVIEW FAILED: ${error.message}`;
+            showToast("COULD NOT READ THAT IMAGE.");
+            return;
+        }
+    }
+
     const site = {
-        id: window.crypto && typeof window.crypto.randomUUID === "function"
-            ? window.crypto.randomUUID()
-            : `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        id: createSiteId(),
         name,
         handle,
         about,
-        color: siteColors.has(siteColorInput.value) ? siteColorInput.value : "#69ff9e"
+        color: siteColors.has(siteColorInput.value) ? siteColorInput.value : "#69ff9e",
+        imageData
     };
     const page = createPersonalSite(site);
 
@@ -513,14 +743,17 @@ makerForm.addEventListener("submit", async (event) => {
         communityStatus.textContent = "PUBLISHING YOUR SITE TO THE SHARED NETWORK…";
         // Publish only the validated fields; the generated preview stays local.
         try {
+            const imagePath = imageFile ? await uploadSiteImage(site.id, imageFile) : null;
             await requestCommunitySites("", {
                 method: "POST",
                 headers: { Prefer: "return=minimal" },
                 body: JSON.stringify({
+                    id: site.id,
                     name: site.name,
                     handle: site.handle,
                     about: site.about,
-                    color: site.color
+                    color: site.color,
+                    image_path: imagePath
                 })
             });
         } catch (error) {
@@ -532,9 +765,19 @@ makerForm.addEventListener("submit", async (event) => {
 
         previewAddress.textContent = "NET SURFER / PUBLISHED";
         try {
-            const publishedSites = await requestCommunitySites("?select=id,created_at,name,handle,about,color&order=created_at.asc");
-            renderCommunityWeb(publishedSites);
+            const publishedSites = await requestCommunitySites("?select=id,created_at,name,handle,about,color,image_path&order=created_at.asc");
+            let replyCounts = new Map();
+            let countsAvailable = true;
+            let countWarning = "";
+            try {
+                replyCounts = await requestReplyCounts();
+            } catch (error) {
+                countsAvailable = false;
+                countWarning = ` REPLY COUNTS UNAVAILABLE: ${error.message}`;
+            }
+            renderCommunityWeb(publishedSites, true, replyCounts, countsAvailable);
             communityStatus.textContent = "YOUR SITE IS PUBLISHED ON THE SHARED NETWORK.";
+            if (countWarning) communityStatus.textContent += countWarning;
             document.querySelector("#community-web").scrollIntoView({ behavior: "smooth", block: "start" });
             showToast("YOUR SITE IS LIVE ON THE SHARED WEB.");
         } catch (error) {
@@ -566,6 +809,18 @@ siteAboutInput.addEventListener("input", () => siteAboutInput.setCustomValidity(
 installWebNavigation();
 applyWebTransform();
 refreshCommunityWeb();
+
+window.addEventListener("resize", () => {
+    const wasCentered = webScale === 1 && webOffsetX === webBaseOffsetX && webOffsetY === webBaseOffsetY;
+    webBaseOffsetX = (webField.clientWidth - webField.clientWidth * webLayoutScale) / 2;
+    webBaseOffsetY = (webField.clientHeight - webField.clientHeight * webLayoutScale) / 2;
+    adjustReplyBadgePositions();
+    if (wasCentered) {
+        webOffsetX = webBaseOffsetX;
+        webOffsetY = webBaseOffsetY;
+        applyWebTransform();
+    }
+});
 
 document.addEventListener("keydown", (event) => {
     if (event.key === "/" && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
