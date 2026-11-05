@@ -412,11 +412,14 @@ function renderCommunityWeb(sites, usePersistentPages = isSupabaseConfigured(), 
         node.setAttribute("aria-label", `Visit ${site.name}, created by @${site.handle}; ${replyText}`);
         const imageUrl = getPublicSiteImageUrl(site.image_path, site.id);
         if (imageUrl) {
+            const imageFrame = document.createElement("span");
+            imageFrame.className = "web-node-image-frame";
             const image = document.createElement("img");
             image.className = "web-node-image";
             image.src = imageUrl;
             image.alt = "";
-            node.append(image);
+            imageFrame.append(image);
+            node.append(imageFrame);
         } else {
             node.textContent = site.name.trim().charAt(0).toUpperCase() || "⌁";
         }
