@@ -1,0 +1,87 @@
+
+body {
+    background-color: black;
+}
+
+.brain {
+    position: relative;
+    left: 39%;
+}
+
+#brainImage {
+    cursor: pointer;
+}
+
+
+#vrImage {
+    position: relative;
+    cursor: pointer;
+    width: 40rem;
+    height: auto;
+}
+
+.braintext {
+    color: rgb(3, 226, 3);
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    padding: 2rem;
+}
+
+.hidden {
+    display: none;
+}
+
+#image2 {
+  
+    position: absolute; 
+    top: 3rem;
+    right: 20rem;
+    height: 70rem;
+    width: 100rem;
+}
+
+#image1 {
+  
+    position: absolute; 
+    top: -6rem;
+    right: -30rem;
+    width: 90rem;
+}
+
+#image3 {
+    position: absolute; 
+    bottom: 0rem;
+    right: -20rem;
+    width: 90rem;
+}
+
+#text-layer {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+}
+
+.random-text {
+    position: absolute;
+    color: lime;
+    font-family: monospace;
+    max-width: 300px;
+    opacity: 1;
+    transition: opacity 5s ease;
+}
+
+#gridCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.content {
+    position: relative;
+    z-index: 1;
+}
