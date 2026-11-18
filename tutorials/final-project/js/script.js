@@ -1,21 +1,23 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-
-//////////////////////////////////////////////////
-// CANVAS
-//////////////////////////////////////////////////
+const binaryBackground = document.createElement("canvas");
+const binaryCtx = binaryBackground.getContext("2d");
+const binaryCells = new Map();
+const BINARY_CELL_WIDTH = 28;
+const BINARY_CELL_HEIGHT = 30;
+let binaryNeedsRedraw = true;
+let lastBinaryCameraX = -1;
 
 function resize() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    binaryBackground.width = canvas.width;
+    binaryBackground.height = canvas.height;
+    binaryNeedsRedraw = true;
 }
 
 resize();
 window.addEventListener("resize", resize);
-
-//////////////////////////////////////////////////
-// WORLD
-//////////////////////////////////////////////////
 
 const CITY_WIDTH = 50000;
 
@@ -23,14 +25,102 @@ const camera = {
     x: 0
 };
 
+function drawBinaryBackground(){
+
+    const now = performance.now();
+    const firstColumn =
+        Math.floor(
+            (camera.x - 12) / BINARY_CELL_WIDTH
+        );
+    const lastColumn =
+        Math.floor(
+            (camera.x + canvas.width - 12) /
+            BINARY_CELL_WIDTH
+        );
+    const rowCount =
+        Math.ceil(
+            (canvas.height - 12) /
+            BINARY_CELL_HEIGHT
+        );
+
+    for(let column=firstColumn;column<=lastColumn;column++){
+
+        for(let row=0;row<rowCount;row++){
+
+            const key = `${column}:${row}`;
+            let cell = binaryCells.get(key);
+
+            if(!cell){
+                cell = {
+                    digit: Math.random() < 0.5 ? "0" : "1",
+                    alpha: 0.05 + Math.random() * 0.1,
+                    color: Math.random() < 0.04 ? "#54ffd2" : "#00ff88",
+                    nextChangeAt:
+                        now + 300 + Math.random() * 2700
+                };
+                binaryCells.set(key, cell);
+                binaryNeedsRedraw = true;
+            }
+            else if(now >= cell.nextChangeAt){
+                cell.digit =
+                    cell.digit === "0"
+                    ? "1"
+                    : "0";
+                cell.nextChangeAt =
+                    now + 300 + Math.random() * 2700;
+                binaryNeedsRedraw = true;
+            }
+        }
+    }
+
+    if(
+        !binaryNeedsRedraw &&
+        camera.x === lastBinaryCameraX
+    ){
+        return;
+    }
+
+    binaryCtx.clearRect(
+        0,
+        0,
+        binaryBackground.width,
+        binaryBackground.height
+    );
+    binaryCtx.font = "16px monospace";
+    binaryCtx.textBaseline = "top";
+
+    for(let column=firstColumn;column<=lastColumn;column++){
+
+        for(let row=0;row<rowCount;row++){
+
+            const cell =
+                binaryCells.get(`${column}:${row}`);
+            const x =
+                12 + column * BINARY_CELL_WIDTH -
+                camera.x;
+            const y =
+                12 + row * BINARY_CELL_HEIGHT;
+
+            binaryCtx.globalAlpha = cell.alpha;
+            binaryCtx.fillStyle = cell.color;
+            binaryCtx.fillText(
+                cell.digit,
+                x,
+                y
+            );
+        }
+    }
+
+    binaryCtx.globalAlpha = 1;
+    binaryNeedsRedraw = false;
+    lastBinaryCameraX = camera.x;
+}
+
 const structures = [];
 const corporations = [];
 const dataFragments = [];
 let nextDataFragmentAt = performance.now() + 300;
 
-//////////////////////////////////////////////////
-// UTILITIES
-//////////////////////////////////////////////////
 
 function rand(min, max) {
     return min + Math.random() * (max - min);
@@ -516,9 +606,6 @@ function generateFortress(){
 
     return shuffle(segs);
 }
-//////////////////////////////////////////////////
-// CREATE STRUCTURE
-//////////////////////////////////////////////////
 
 function createStructure(x){
 
@@ -612,10 +699,6 @@ function createStructure(x){
         state:"build"
     };
 }
-
-//////////////////////////////////////////////////
-// CORPORATIONS
-//////////////////////////////////////////////////
 
 function createCorporation(x){
 
@@ -943,7 +1026,7 @@ function drawStructure(s){
     }
 }
 
-
+// text inputs -------------------------------------------------
 
 function drawDataFragments(){
 
@@ -951,39 +1034,49 @@ function drawDataFragments(){
 
     if(now >= nextDataFragmentAt){
 
-        let text = "";
+        const text = pick([
+            "EVEN IN DIGITAL SPACE, THE RICH TAKE CONTROL. GRABBING TERRITORY FOR MONETIZATION",
+            "EVERY BRANCH IS A SIGNAL TO BE TRACED",
+            "WE CAN CREATE OUR OWN WORLDS NOW",
+            "HELLO? IS ANYBODY THERE?",
+            "AN OCEAN OF CODE, SO MUCH TO EXPLORE",
+            "WE GREW THROUGH THE STATIC",
+            "THE RIVER CARRIES OLD PASSWORDS",
+            "DO NOT FOLLOW THE GREEN LIGHTS",
+            "SOMETHING IS BLOOMING IN THE WIRES",
+            "THIS PLACE WAS ALIVE BEFORE YOU",
+            "THE MOON IS A BROKEN INTERFACE",
+            "LISTEN BETWEEN THE PACKETS",
+            "WE ARE STILL CONNECTED SOMEWHERE"
+        ]);
+        let size = rand(12, 16);
+        const maxTextWidth =
+            Math.max(1, canvas.width - 24);
 
-        if(Math.random() < 0.55){
+        ctx.font = `${size}px monospace`;
 
-            const length =
-                Math.floor(
-                    rand(5,15)
-                );
+        const fullTextWidth =
+            ctx.measureText(text).width;
 
-            for(let i=0;i<length;i++){
-                text += Math.random() < 0.5 ? "0" : "1";
-            }
+        if(fullTextWidth > maxTextWidth){
+            size *= maxTextWidth / fullTextWidth;
         }
-        else{
-            text = pick([
-                "SIGNAL_LOST",
-                "ROOT_ACCESS",
-                "ECO.exe",
-                "NOISE//DATA",
-                "WILD_SYSTEM"
-            ]);
-        }
+
+        ctx.font = `${size}px monospace`;
+
+        const textWidth =
+            ctx.measureText(text).width;
 
         const typingDuration =
             text.length * rand(65, 95);
         const holdDuration =
-            rand(200, 400);
+            rand(450, 750);
         const eraseDuration =
             text.length * rand(45, 70);
 
         dataFragments.push({
             text,
-            x: rand(12, Math.max(12, canvas.width - 140)),
+            x: rand(12, Math.max(12, canvas.width - textWidth - 12)),
             y: rand(50, Math.max(51, canvas.height - 16)),
             createdAt: now,
             typingDuration,
@@ -995,7 +1088,7 @@ function drawDataFragments(){
                 eraseDuration +
                 160,
             drift: rand(-12, 12),
-            size: rand(12, 18),
+            size,
             color: pick(["#00ff88", "#54ffd2", "#a4ff68"])
         });
 
@@ -1004,7 +1097,7 @@ function drawDataFragments(){
         }
 
         nextDataFragmentAt =
-            now + rand(300, 900);
+            now + rand(900, 1800);
     }
 
     for(let i=dataFragments.length-1;i>=0;i--){
@@ -1093,6 +1186,8 @@ function drawDataFragments(){
 
 function draw(){
 
+    drawBinaryBackground();
+
     ctx.fillStyle = "#000";
 
     ctx.fillRect(
@@ -1101,6 +1196,8 @@ function draw(){
         canvas.width,
         canvas.height
     );
+
+    ctx.drawImage(binaryBackground, 0, 0);
 
     drawCorporations();
 
