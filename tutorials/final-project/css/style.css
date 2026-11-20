@@ -37,3 +37,30 @@ canvas{
 
     z-index:10;
 }
+
+.travel-link{
+    position:absolute;
+    bottom:20px;
+    left:20px;
+
+    padding:10px;
+
+    border:1px solid #00ff88;
+
+    color:#00ff88;
+    background:rgba(0,0,0,.8);
+
+    font:inherit;
+    text-decoration:none;
+
+    z-index:10;
+}
+
+.travel-link--above{
+    bottom:76px;
+}
+
+.travel-link:hover, .travel-link:focus-visible{
+    color:#000;
+    background:#00ff88;
+}

@@ -20,6 +20,8 @@ resize();
 window.addEventListener("resize", resize);
 
 const CITY_WIDTH = 50000;
+const isDeeper = document.body.dataset.depth === "deeper";
+const isDeepest = document.body.dataset.depth === "deepest";
 
 const camera = {
     x: 0
@@ -118,7 +120,66 @@ function drawBinaryBackground(){
 
 const structures = [];
 const corporations = [];
+const distantStructures = [];
+const distantPolygons = [];
 const dataFragments = [];
+const fragmentMessages = isDeeper
+    ? [
+        "IT'S A LITTLE SCARY HERE",
+        "CAN WE GO BACK?",
+        "THIS FEELS LIKE REAL LIFE WHEN YOU LEAVE THE CITY AND FINALLY HEAR THE QUIET",
+        "WE STILL HAVE SO MUCH TO EXPLORE",
+        "MORE DIGITAL SPACE TO EXPLORE AND CONQUER",
+        "BE CAREFUL.. GOING DEEPER",
+        "IS THIS A SUBNETWORK?",
+        "IT FEELS MORE EERIE HERE",
+        "WE ARE FARTHER FROM THE NOISE NOW",
+        "WHAT ELSE IS HIDING BELOW?",
+        "IT'S QUIETER HERE",
+        "WE CAN GO FURTHER?",
+        "ARE WE FREE HERE?",
+        "IS THIS PART OF CYBERSPACE SAFE?",
+        "I DON'T WANT TO GO FURTHER",
+        "HAVE YOU HEARD THE STORIES OF THE DEEP NET?",
+        "AT LEAST THERE'S STILL SIGNS OF LIFE",
+        "AT LEAST LESS CORPS CONTROL THIS LAYER OF NETWORK",
+        "WE CAN BUILD WHATEVER WE WANT HERE",
+        "IS THIS WHERE THE LOW CLASS OF THE NETWORK GO?",
+        "THERE'S SO MUCH MORE SPACE HERE",
+        "WHY DOESN'T ANYBODY GO DOWN HERE?",
+        "",
+    ]
+    : isDeepest
+    ? [
+        "I KNOW YOU SEE THESE SIGNALS",
+        "KEEP GOING",
+        "YOU SHOULDN'T BE HERE",
+        "TURN BACK",
+        "DON'T LISTEN TO THEM",
+        "IT'S A TRAP",
+        "UNREGULATED LAYER OF THE NETWORK",
+        "THERE'S NO RULES HERE",
+    ]
+    : [
+        "EVEN IN DIGITAL SPACE, THE RICH TAKE CONTROL. GRABBING TERRITORY FOR MONETIZATION",
+        "EVERY BRANCH IS A SIGNAL TO BE TRACED",
+        "WE CAN CREATE OUR OWN WORLDS NOW",
+        "HELLO? IS ANYBODY THERE?",
+        "AN OCEAN OF CODE, SO MUCH TO EXPLORE",
+        "SEARCH THROUGH THE FRAGMENTS",
+        "WE INHABIT THIS DIGITAL PLANE NOW",
+        "I FOUND OLD PASSWORDS",
+        "STAY AWAY FROM THE RED WEB",
+        "A NEW HOME FOR HUMANITY.. IT'S WEIRDLY BEAUTIFUL",
+        "A DIGITAL SPACE THAT FEELS ALIVE",
+        "I WONDER IF ANYBODY CAN SEE THIS",
+        "SO MUCH DATA TRAFFIC TODAY",
+        "I'M MONITORING THEM",
+        "WE BUILD AND THE RICH TAKE",
+        "WE WORK SO HARD TO MAINTAIN THE LITTLE FRAGMENTS WE HAVE LEFT",
+        "",
+        ""
+    ];
 let nextDataFragmentAt = performance.now() + 300;
 
 
@@ -214,7 +275,7 @@ function generateSignal(w,h){
         currentX = nextX;
     }
 
-    return lines;
+    return shuffle(lines);
 }
 
 function generateConstellation(w,h){
@@ -607,7 +668,7 @@ function generateFortress(){
     return shuffle(segs);
 }
 
-function createStructure(x){
+function createStructure(x, isDistant = false){
 
     const width =
         rand(150,350);
@@ -679,10 +740,11 @@ function createStructure(x){
 
         y:
             rand(
-                -200,
+                isDistant ? -100 : -200,
                 canvas.height
             ),
 
+        isDistant,
         blueprint,
 
         buildProgress:0,
@@ -700,15 +762,17 @@ function createStructure(x){
     };
 }
 
-function createCorporation(x){
+function createCorporation(x, isDistant = false){
 
-    const type = pick([
-        "territory",
-        "circuit",
-        "polygon",
-        "fortress",
-        "network"
-    ]);
+    const type = isDistant
+        ? "polygon"
+        : pick([
+            "territory",
+            "circuit",
+            "polygon",
+            "fortress",
+            "network"
+        ]);
 
     let geometry = [];
 
@@ -745,10 +809,11 @@ function createCorporation(x){
         x,
 
         y: rand(
-            -300,
+            isDistant ? -150 : -300,
             canvas.height + 300
         ),
 
+        isDistant,
         geometry,
 
         build:0,
@@ -765,16 +830,18 @@ function createCorporation(x){
 
 let p = 0;
 
-while(p < CITY_WIDTH){
+while(p < CITY_WIDTH && !isDeepest){
 
     structures.push(
         createStructure(p)
     );
 
-    p += rand(30,90);
+    p += isDeeper
+        ? rand(400,700)
+        : rand(30,90);
 }
 
-for(let i=0;i<100;i++){
+for(let i=0;i<(isDeepest ? 0 : (isDeeper ? 8 : 100));i++){
 
     corporations.push(
 
@@ -788,13 +855,45 @@ for(let i=0;i<100;i++){
     );
 }
 
+let distantX = 0;
+
+while(distantX < CITY_WIDTH && !isDeepest){
+
+    distantStructures.push(
+        createStructure(distantX, true)
+    );
+
+    distantX += isDeeper
+        ? rand(400,700)
+        : rand(50,100);
+}
+
+for(let i=0;i<(isDeepest ? 0 : (isDeeper ? 14 : 200));i++){
+
+    distantPolygons.push(
+        createCorporation(
+            rand(0, CITY_WIDTH),
+            true
+        )
+    );
+}
+
+const allStructures = [
+    ...structures,
+    ...distantStructures
+];
+const allCorporations = [
+    ...corporations,
+    ...distantPolygons
+];
+
 //////////////////////////////////////////////////
 // UPDATE
 //////////////////////////////////////////////////
 
 function update(){
 
-    corporations.forEach(c => {
+    allCorporations.forEach(c => {
 
         c.build += 0.002;
 
@@ -803,7 +902,7 @@ function update(){
         }
     });
 
-    structures.forEach(s => {
+    allStructures.forEach(s => {
 
         if(s.state === "build"){
 
@@ -849,7 +948,8 @@ function update(){
                 Object.assign(
                     s,
                     createStructure(
-                        s.x
+                        s.x,
+                        s.isDistant
                     )
                 );
             }
@@ -857,13 +957,10 @@ function update(){
     });
 }
 
-//////////////////////////////////////////////////
-// DRAW CORPORATIONS
-//////////////////////////////////////////////////
 
-function drawCorporations(){
+function drawCorporations(items = corporations){
 
-    corporations.forEach(c => {
+    items.forEach(c => {
 
         const x =
             c.x -
@@ -876,11 +973,11 @@ function drawCorporations(){
             return;
         }
 
+        const buildProgress =
+            c.geometry.length *
+            c.build;
         const visible =
-            Math.floor(
-                c.geometry.length *
-                c.build
-            );
+            Math.floor(buildProgress);
 
         ctx.save();
 
@@ -893,8 +990,23 @@ function drawCorporations(){
             c.rotation
         );
 
-        ctx.strokeStyle =
-            "rgba(255,0,0,1)";
+        if(c.isDistant){
+            const scale =
+                isDeeper ? 0.8 : 0.45;
+
+            ctx.scale(scale, scale);
+            ctx.strokeStyle =
+                "rgba(110,0,0,.5)";
+            ctx.lineWidth = 1;
+        }
+        else{
+            if(isDeeper){
+                ctx.scale(1.15, 1.15);
+            }
+
+            ctx.strokeStyle =
+                "rgba(255,0,0,1)";
+        }
 
         for(let i=0;i<visible;i++){
 
@@ -925,6 +1037,39 @@ function drawCorporations(){
             ctx.lineWidth = 4;
         }
 
+        if(visible < c.geometry.length){
+            const seg =
+                c.geometry[visible];
+            const progress =
+                buildProgress - visible;
+            const glitch =
+                Math.sin(
+                    performance.now()
+                    *0.0005 +
+                    visible
+                ) * 15;
+            const startX =
+                seg.x1 + glitch;
+            const endX =
+                seg.x2 - glitch;
+
+            ctx.beginPath();
+
+            ctx.moveTo(
+                startX,
+                seg.y1
+            );
+
+            ctx.lineTo(
+                startX +
+                    (endX - startX) * progress,
+                seg.y1 +
+                    (seg.y2 - seg.y1) * progress
+            );
+
+            ctx.stroke();
+        }
+
         ctx.restore();
     });
 }
@@ -938,9 +1083,14 @@ function drawStructure(s){
     const worldX =
         s.x -
         camera.x;
+    const transformed =
+        s.isDistant ||
+        isDeeper;
+    const isDestroying =
+        s.state === "destroy";
 
     const visible =
-        s.state === "destroy"
+        isDestroying
         ? s.blueprint.length -
           Math.floor(
             s.destroyProgress
@@ -948,13 +1098,34 @@ function drawStructure(s){
         : Math.floor(
             s.buildProgress
           );
+    const fullyVisible =
+        isDestroying
+            ? Math.max(0, visible - 1)
+            : visible;
 
-    ctx.strokeStyle =
-        "rgba(0,255,136,.9)";
+    if(transformed){
+        ctx.save();
+        ctx.translate(worldX, s.y);
+        const scale =
+            s.isDistant
+                ? (isDeeper ? 0.8 : 0.45)
+                : 1.15;
+
+        ctx.scale(scale, scale);
+    }
+
+    if(s.isDistant){
+        ctx.strokeStyle =
+            "rgba(0,90,50,.6)";
+    }
+    else{
+        ctx.strokeStyle =
+            "rgba(0,255,136,.9)";
+    }
 
     for(
         let i=0;
-        i<visible;
+        i<fullyVisible;
         i++
     ){
 
@@ -964,19 +1135,99 @@ function drawStructure(s){
         ctx.beginPath();
 
         ctx.moveTo(
-            worldX +
+            (transformed ? 0 : worldX) +
             seg.x1,
 
-            s.y +
+            (transformed ? 0 : s.y) +
             seg.y1
         );
 
         ctx.lineTo(
-            worldX +
+            (transformed ? 0 : worldX) +
             seg.x2,
 
-            s.y +
+            (transformed ? 0 : s.y) +
             seg.y2
+        );
+
+        ctx.stroke();
+    }
+
+    if(isDestroying && visible > 0){
+        const seg =
+            s.blueprint[visible - 1];
+        const progress =
+            1 -
+            (
+                s.destroyProgress -
+                Math.floor(s.destroyProgress)
+            );
+        const x =
+            transformed ? 0 : worldX;
+        const y =
+            transformed ? 0 : s.y;
+        const endX =
+            seg.x1 +
+            (seg.x2 - seg.x1) * progress;
+        const endY =
+            seg.y1 +
+            (seg.y2 - seg.y1) * progress;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x + seg.x1,
+            y + seg.y1
+        );
+
+        ctx.lineTo(
+            x + endX,
+            y + endY
+        );
+
+        ctx.stroke();
+
+        ctx.fillStyle =
+            s.isDistant ? "#315846" : "#fff";
+
+        ctx.beginPath();
+
+        ctx.arc(
+            x + endX,
+            y + endY,
+            2,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.fill();
+    }
+
+    if(
+        s.state === "build" &&
+        visible < s.blueprint.length
+    ){
+        const seg =
+            s.blueprint[visible];
+        const progress =
+            s.buildProgress - visible;
+        const x =
+            transformed ? 0 : worldX;
+        const y =
+            transformed ? 0 : s.y;
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            x + seg.x1,
+            y + seg.y1
+        );
+
+        ctx.lineTo(
+            x + seg.x1 +
+                (seg.x2 - seg.x1) * progress,
+            y + seg.y1 +
+                (seg.y2 - seg.y1) * progress
         );
 
         ctx.stroke();
@@ -1009,13 +1260,13 @@ function drawStructure(s){
                 (seg.y2-seg.y1)*t;
 
             ctx.fillStyle =
-                "#fff";
+                s.isDistant ? "#315846" : "#fff";
 
             ctx.beginPath();
 
             ctx.arc(
-                worldX + px,
-                s.y + py,
+                (transformed ? 0 : worldX) + px,
+                (transformed ? 0 : s.y) + py,
                 2,
                 0,
                 Math.PI * 2
@@ -1023,6 +1274,10 @@ function drawStructure(s){
 
             ctx.fill();
         }
+    }
+
+    if(transformed){
+        ctx.restore();
     }
 }
 
@@ -1034,21 +1289,7 @@ function drawDataFragments(){
 
     if(now >= nextDataFragmentAt){
 
-        const text = pick([
-            "EVEN IN DIGITAL SPACE, THE RICH TAKE CONTROL. GRABBING TERRITORY FOR MONETIZATION",
-            "EVERY BRANCH IS A SIGNAL TO BE TRACED",
-            "WE CAN CREATE OUR OWN WORLDS NOW",
-            "HELLO? IS ANYBODY THERE?",
-            "AN OCEAN OF CODE, SO MUCH TO EXPLORE",
-            "WE GREW THROUGH THE STATIC",
-            "THE RIVER CARRIES OLD PASSWORDS",
-            "DO NOT FOLLOW THE GREEN LIGHTS",
-            "SOMETHING IS BLOOMING IN THE WIRES",
-            "THIS PLACE WAS ALIVE BEFORE YOU",
-            "THE MOON IS A BROKEN INTERFACE",
-            "LISTEN BETWEEN THE PACKETS",
-            "WE ARE STILL CONNECTED SOMEWHERE"
-        ]);
+        const text = pick(fragmentMessages);
         let size = rand(12, 16);
         const maxTextWidth =
             Math.max(1, canvas.width - 24);
@@ -1198,6 +1439,12 @@ function draw(){
     );
 
     ctx.drawImage(binaryBackground, 0, 0);
+
+    drawCorporations(distantPolygons);
+
+    distantStructures.forEach(
+        drawStructure
+    );
 
     drawCorporations();
 
